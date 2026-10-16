@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>LPM-T&S — Taste & See</title>
+<style>
+:root{--blue:#0b2d5c;--blue2:#164a86;--gold:#d8ad4a;--ink:#111;--muted:#667085;--paper:#f6f8fb;--card:#fff;--green:#177245;--red:#a92f2f;--shadow:0 8px 24px rgba(0,0,0,.09)}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--paper);color:var(--ink);font-size:18px}button,input,select,textarea{font:inherit}.top{background:var(--blue);color:#fff;padding:18px 16px;border-bottom:6px solid var(--gold);position:sticky;top:0;z-index:10}.brand{max-width:980px;margin:auto;display:flex;gap:12px;align-items:center}.logo{width:56px;height:56px;border-radius:14px;background:#fff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:25px}.brand h1{font-size:26px;margin:0;line-height:1.05}.brand p{margin:4px 0 0;font-size:15px;opacity:.92}.wrap{max-width:980px;margin:auto;padding:16px}.hero,.panel,.card{background:var(--card);border:2px solid #dce3ec;border-radius:18px;box-shadow:var(--shadow)}.hero{padding:18px;margin-bottom:16px}.hero h2{margin:0 0 8px;color:var(--blue);font-size:28px}.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.pill{border-radius:13px;padding:11px;text-align:center;background:#eef3f9;font-weight:800}.pill strong{display:block;font-size:22px;color:var(--blue)}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:8px;margin:8px 0 14px}.tab{border:2px solid var(--blue);background:#fff;color:var(--blue);padding:11px 14px;border-radius:12px;font-weight:800;white-space:nowrap}.tab.active{background:var(--blue);color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.card{padding:14px;display:flex;flex-direction:column;gap:10px}.thumb{height:120px;border-radius:14px;background:linear-gradient(135deg,#e9eff7,#fff);display:grid;place-items:center;border:1px solid #d8e1eb;font-size:46px}.tag{display:inline-block;padding:5px 9px;border-radius:999px;font-size:13px;font-weight:800;background:#e9eff7;color:var(--blue)}.price{font-weight:900;color:var(--green)}.card h3{margin:0;color:var(--blue);font-size:21px}.card p{margin:0;color:#333;line-height:1.35}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}.primary{background:var(--blue);color:#fff}.gold{background:var(--gold);color:#111}.soft{background:#e9eff7;color:var(--blue)}.green{background:var(--green);color:#fff}.red{background:var(--red);color:#fff}.wide{width:100%}.panel{padding:16px;margin-top:18px}.panel h2{margin-top:0;color:var(--blue)}.field{margin:10px 0}.field label{display:block;font-weight:800;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:2px solid #b9c5d3;border-radius:11px;padding:12px;background:#fff}.notice{padding:12px;border-left:6px solid var(--gold);background:#fff8e8;border-radius:10px;margin:10px 0}.success{border-left-color:var(--green);background:#ebf7f0}.hidden{display:none!important}.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;display:grid;place-items:center;padding:15px}.modalbox{background:#fff;max-width:650px;width:100%;max-height:92vh;overflow:auto;border-radius:20px;padding:18px;border:5px solid var(--blue)}.modalbox h2{color:var(--blue);margin-top:0}.close{float:right;background:#eee;border:0;border-radius:10px;padding:8px 12px;font-weight:900}.adminrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.small{font-size:14px;color:var(--muted)}.footer{margin:28px 0 10px;text-align:center;font-size:14px;color:#555}.footer strong{display:block;color:var(--blue);font-size:17px}.locked{opacity:.62;filter:grayscale(.2)}
+@media(max-width:560px){body{font-size:17px}.brand h1{font-size:22px}.logo{width:48px;height:48px}.hero h2{font-size:24px}.status{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.adminrow{grid-template-columns:1fr}.wrap{padding:10px}.top{padding:12px 10px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand"><div class="logo">LPM</div><div><h1>LPM‑T&S — Taste & See</h1><p>Try a little. See what helps. Choose what fits.</p></div></div></header>
+<main class="wrap">
+<section class="hero">
+<h2>Welcome to Taste & See</h2>
+<div>Explore ministry tools, free resources, and LPM‑Exchange products. You may preview <b>3 items</b>, then activate a <b>free 1‑day use pass</b> for one product.</div>
+<div class="status">
+  <div class="pill"><strong id="previewCount">0 / 3</strong>Previews Used</div>
+  <div class="pill"><strong id="passState">Not Active</strong>1‑Day Pass</div>
+  <div class="pill"><strong id="interestCount">0</strong>Saved Interests</div>
+</div>
+<div id="passNotice" class="notice hidden"></div>
+</section>
+<div class="tabs">
+<button class="tab active" data-filter="all">All Samplers</button>
+<button class="tab" data-filter="ministry">Ministry</button>
+<button class="tab" data-filter="free">Free</button>
+<button class="tab" data-filter="exchange">LPM‑Exchange</button>
+<button class="tab" data-filter="trial">1‑Day Eligible</button>
+</div>
+<section id="catalog" class="grid"></section>
+
+<section class="panel">
+<h2>Your Next Step</h2>
+<div class="field"><label for="nextItem">Product / Ministry</label><select id="nextItem"></select></div>
+<div class="field"><label for="nextChoice">What would you like to do?</label><select id="nextChoice"><option>Buy through LPM-Exchange</option><option>Request FREE ministry access if offered</option><option>Donate Options — FREE</option><option>Donate Options — $5</option><option>Donate Options — ENTER AMOUNT</option><option>Ask for Follow-Up</option></select></div>
+<div class="actions"><button class="btn primary" onclick="openJotform()">Submit my Selections</button><button class="btn gold" onclick="openJotform()">Ask for Follow-Up</button></div>
+<p class="small">FREE always means free when that item is offered as a free ministry resource. Optional support is never required for free access.</p>
+</section>
+
+<section class="panel">
+<h2>LPM Admin / Backend</h2>
+<p>Use this section on the LPM device to add sampler items, change prices or terms, and export/import the catalog. Visitor follow-up and trial/acquisition requests are collected in Jotform.</p>
+<button class="btn soft wide" onclick="toggleAdmin()">Open Admin Tools</button>
+<div id="admin" class="hidden">
+  <div class="field"><label>Title</label><input id="aTitle" placeholder="Product or ministry name"></div>
+  <div class="field"><label>Short description</label><textarea id="aDesc" rows="3"></textarea></div>
+  <div class="adminrow"><div class="field"><label>Category</label><select id="aCat"><option value="ministry">Ministry</option><option value="free">Free</option><option value="exchange">LPM-Exchange</option></select></div><div class="field"><label>Price / Terms</label><input id="aPrice" placeholder="FREE, $9, Donation, etc."></div></div>
+  <div class="field"><label><input type="checkbox" id="aTrial" checked> Eligible for 1-day free use</label></div>
+  <button class="btn green wide" onclick="addItem()">Add Sampler Item</button>
+  <div class="actions" style="margin-top:10px"><button class="btn soft" onclick="exportCatalog()">Export Catalog</button><button class="btn soft" onclick="document.getElementById('importFile').click()">Import Catalog</button></div>
+  <input type="file" id="importFile" class="hidden" accept="application/json" onchange="importCatalog(event)">
+  <button class="btn red wide" style="margin-top:10px" onclick="resetDemo()">Restore Current LPM Catalog</button>
+</div>
+</section>
+<div class="footer"><strong>Living Pages Ministry</strong>Taste & See — LPM‑T&S</div>
+</main>
+
+<div id="modal" class="modal hidden"><div class="modalbox"><button class="close" onclick="closeModal()">✕ Close</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
+<script>
+const JOTFORM='https://form.jotform.com/262792940083059';
+const defaults=[
+{id:'whatdoesgodsay',title:'What Does God Say?',desc:'A free Living Pages Ministry resource that helps users explore what Scripture says about real-life questions and needs.',cat:'free',price:'FREE · Optional support: $5 or enter amount',trial:true,icon:'📖',status:'LIVE'},
+{id:'godcanhelp',title:'God Can Help',desc:'A free ministry resource that helps people connect a need or struggle with biblical encouragement and next steps.',cat:'free',price:'FREE ministry access',trial:true,icon:'🙏',status:'LIVE'},
+{id:'poweroverevil',title:"God’s Power Over the Evil One",desc:'A free ministry sampler focused on biblical truth, encouragement, and confidence in God’s power.',cat:'free',price:'FREE ministry access',trial:true,icon:'🛡️',status:'LIVE'},
+{id:'ministryhub',title:'LPM Ministry Hub',desc:'A central doorway to Living Pages Ministry lessons, tools, outreach resources, and ministry media.',cat:'ministry',price:'Ministry access',trial:true,icon:'⛪',status:'LIVE'},
+{id:'masterportal',title:'LPM Master Portal',desc:'A central LPM portal for finding ministry programs, product families, and working tools from one place.',cat:'ministry',price:'Portal / terms vary by item',trial:true,icon:'🧭',status:'LIVE'},
+{id:'rollinglyrics',title:'LPM Rolling Lyrics Studio',desc:'A visual lyric and spoken-word presentation tool for ministry, music, teaching, and guided presentations.',cat:'exchange',price:'LPM-Exchange · Purchase terms being finalized',trial:true,icon:'🎼',status:'LIVE'},
+{id:'busstoptagger',title:'LPM Bus Stop Tagger',desc:'A transportation utility for identifying, labeling, and organizing school-bus stop information.',cat:'exchange',price:'LPM-Exchange · Purchase terms being finalized',trial:true,icon:'🚌',status:'LIVE'},
+{id:'cas',title:'LPM-CAS',desc:'A current LPM application available online for guided sampling through Taste & See.',cat:'exchange',price:'LPM-Exchange · Terms shown before acquisition',trial:true,icon:'✨',status:'LIVE'},
+{id:'mbc',title:'LPM-MBC',desc:'A current LPM product available online with a sampler path before purchase or acquisition.',cat:'exchange',price:'LPM-Exchange · Purchase flow in final setup',trial:true,icon:'🧰',status:'LIVE'},
+{id:'pbd',title:'LPM-PBD',desc:'A current LPM product with buyer-facing updates and a Taste & See preview path.',cat:'exchange',price:'LPM-Exchange · Buyer terms apply',trial:true,icon:'📦',status:'LIVE'},
+{id:'aic',title:'LPM-AIC',desc:'A current online LPM product prepared for sampler viewing and acquisition follow-up.',cat:'exchange',price:'LPM-Exchange · Purchase flow in final setup',trial:true,icon:'💡',status:'LIVE'},
+{id:'routeready',title:'Route Ready',desc:'LPM transportation tools for route guidance, driver workflow, dispatch confidence, fleet information, and exceptions.',cat:'exchange',price:'LPM-Exchange · Commercial product family',trial:true,icon:'🚌',status:'SAMPLER'},
+{id:'voices',title:'LPM Voices Together',desc:'An assisted creation service for family, church, tribute, spoken, and music collaborations across distance.',cat:'ministry',price:'Service / terms vary',trial:true,icon:'🎙️',status:'SAMPLER'},
+{id:'lessonflow',title:'LPM LessonFlow',desc:'Build Bible lesson and media packages from a guided topic-to-output workflow.',cat:'ministry',price:'Ministry / terms vary',trial:true,icon:'📚',status:'SAMPLER'},
+{id:'bbt',title:'LPM Basic Bible Truths',desc:'Clear Bible-truth lessons and spoken-only teaching materials for adults and youth.',cat:'ministry',price:'Ministry content',trial:true,icon:'✝️',status:'SAMPLER'},
+{id:'lifetopics',title:'LPM LifeTopics',desc:'Short spoken-only life lessons with reflection questions and a faith-centered response.',cat:'ministry',price:'Ministry / optional support',trial:true,icon:'🌱',status:'SAMPLER'}
+];
+let items=JSON.parse(localStorage.getItem('lpm_ts_items_v2')||'null')||defaults;
+let previews=JSON.parse(localStorage.getItem('lpm_ts_previews')||'[]');
+let interests=JSON.parse(localStorage.getItem('lpm_ts_interests')||'[]');
+let pass=JSON.parse(localStorage.getItem('lpm_ts_pass')||'null');
+let filter='all';
+function save(){localStorage.setItem('lpm_ts_items_v2',JSON.stringify(items));localStorage.setItem('lpm_ts_previews',JSON.stringify(previews));localStorage.setItem('lpm_ts_interests',JSON.stringify(interests));localStorage.setItem('lpm_ts_pass',JSON.stringify(pass));}
+function passActive(){return pass&&Date.now()<pass.expires}
+function render(){
+ const c=document.getElementById('catalog'); c.innerHTML='';
+ items.filter(x=>filter==='all'||x.cat===filter||(filter==='trial'&&x.trial)).forEach(x=>{
+  const used=previews.includes(x.id), locked=previews.length>=3&&!used&&!passActive();
+  const div=document.createElement('article'); div.className='card'+(locked?' locked':'');
+  div.innerHTML=`<div class="thumb">${x.icon||'✨'}</div><div><span class="tag">${x.cat==='exchange'?'LPM‑Exchange':x.cat.toUpperCase()}</span> <span class="tag">${esc(x.status||'SAMPLER')}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.desc)}</p><div class="price">${esc(x.price)}</div><div class="actions"><button class="btn primary" ${locked?'disabled':''} onclick="preview('${x.id}')">${used?'View Again':'Taste It'}</button><button class="btn gold" onclick="choose('${x.id}')">I’m Interested</button></div>`;
+  c.appendChild(div);
+ });
+ const sel=document.getElementById('nextItem'); sel.innerHTML=items.map(x=>`<option value="${x.id}">${esc(x.title)}</option>`).join('');
+ document.getElementById('previewCount').textContent=Math.min(previews.length,3)+' / 3';
+ document.getElementById('interestCount').textContent=interests.length;
+ const ps=document.getElementById('passState'), pn=document.getElementById('passNotice');
+ if(passActive()){const hrs=Math.max(1,Math.ceil((pass.expires-Date.now())/3600000)); ps.textContent=hrs+'h left';pn.classList.remove('hidden');pn.className='notice success';pn.textContent=`Your 1-day pass is active for ${items.find(x=>x.id===pass.itemId)?.title||'your selected item'} — about ${hrs} hour(s) remaining.`}
+ else {ps.textContent=pass?'Expired':'Not Active';pn.classList.toggle('hidden',!pass); if(pass){pn.className='notice';pn.textContent='Your 1-day pass has ended. Choose Buy, Acquire, FREE ministry access when offered, or Ask for Follow-Up.'}}
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function preview(id){const x=items.find(i=>i.id===id); if(!x)return; if(!previews.includes(id)){if(previews.length>=3&&!passActive()){showPassOffer();return;} previews.push(id);save();}
+ showModal(x.title,`<div class="thumb">${x.icon||'✨'}</div><p><b>Quick taste:</b> ${esc(x.desc)}</p><div class="notice">This sampler shows the purpose, appearance, and basic flow without giving away the full product.</div>${x.trial?'<button class="btn green wide" onclick="activatePass(\''+x.id+'\')">Use My 1‑Day Free Pass for This</button>':''}<button class="btn gold wide" style="margin-top:8px" onclick="choose('${x.id}')">Buy / Acquire / Follow-Up</button>`); render();}
+function showPassOffer(){showModal('You have tasted 3 items',`<p>You have used your 3 quick previews.</p><div class="notice success"><b>Next:</b> choose one eligible product for a free 1‑day use pass.</div>${items.filter(x=>x.trial).map(x=>`<button class="btn primary wide" style="margin:5px 0" onclick="activatePass('${x.id}')">1‑Day Pass: ${esc(x.title)}</button>`).join('')}`)}
+function activatePass(id){pass={itemId:id,started:Date.now(),expires:Date.now()+24*60*60*1000};save();render();showModal('1‑Day Pass Activated',`<div class="notice success"><b>Active now.</b> Your free use period ends 24 hours from activation.</div><p>When you are finished, you can choose to buy, acquire under the item’s ministry terms, use a FREE option when offered, donate optionally, or ask LPM for help.</p><button class="btn gold wide" onclick="choose('${id}')">Choose Next Step</button>`)}
+function choose(id){const x=items.find(i=>i.id===id); if(x){document.getElementById('nextItem').value=id;if(!interests.includes(id)) interests.push(id);save();render();} openJotform();}
+function openJotform(){window.open(JOTFORM,'_blank','noopener');}
+function showModal(t,b){document.getElementById('mTitle').textContent=t;document.getElementById('mBody').innerHTML=b;document.getElementById('modal').classList.remove('hidden')}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function toggleAdmin(){document.getElementById('admin').classList.toggle('hidden')}
+function addItem(){const title=document.getElementById('aTitle').value.trim();if(!title)return alert('Enter a title.');items.push({id:'item_'+Date.now(),title,desc:document.getElementById('aDesc').value.trim()||'LPM sampler item.',cat:document.getElementById('aCat').value,price:document.getElementById('aPrice').value.trim()||'Terms vary',trial:document.getElementById('aTrial').checked,icon:'✨'});save();render();document.getElementById('aTitle').value='';document.getElementById('aDesc').value='';document.getElementById('aPrice').value='';alert('Sampler item added.')}
+function exportCatalog(){const blob=new Blob([JSON.stringify(items,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='LPM-Taste-and-See-Catalog.json';a.click();URL.revokeObjectURL(a.href)}
+function importCatalog(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d))throw 0;items=d;save();render();alert('Catalog imported.')}catch{alert('That file is not a valid Taste & See catalog.')}};r.readAsText(f)}
+function resetDemo(){if(!confirm('Restore the current LPM catalog and clear previews, interests and pass?'))return;items=defaults;previews=[];interests=[];pass=null;save();render()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()});
+render(); setInterval(render,60000);
+</script>
+</body>
+</html>
