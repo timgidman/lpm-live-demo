@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v18</title>
+<style>
+:root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.45 system-ui,-apple-system,sans-serif;padding:20px 16px 40px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:Georgia,serif;font-weight:400;font-size:38px;line-height:1.1;margin:4px 0 0}
+.ver{font-size:14px;font-weight:700;color:var(--accent);border:1px solid var(--accent);border-radius:99px;padding:1px 10px;display:inline-block;margin-top:8px}
+ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+li{display:flex;flex-direction:column}
+.song{width:100%;text-align:left;font:600 20px system-ui,sans-serif;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:flex;gap:12px;align-items:center;min-width:0}
+.song .n{color:var(--muted);min-width:1.6em}
+li.on .song{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+li.on .song .n{color:var(--accent-ink)}
+.mini{display:none;align-items:center;gap:10px;padding:8px 6px 4px}
+li.on .mini{display:flex}
+.pp{font:700 16px system-ui,sans-serif;padding:8px 14px;border-radius:10px;border:2px solid var(--accent);background:var(--card);color:var(--accent);cursor:pointer;min-width:84px}
+.mini input[type=range]{flex:1;min-width:0;height:32px;accent-color:var(--accent)}
+.tm{font-size:14px;color:var(--muted);min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.fb{display:block;width:100%;cursor:pointer;text-align:center;text-decoration:none;font:700 20px system-ui,sans-serif;padding:16px;border-radius:12px;background:var(--gold);color:var(--gold-ink);border:2px solid var(--gold-ink)}
+.msg{margin:0;color:#8a1c1c}
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.row{display:flex;gap:8px;align-items:stretch}.row .song{flex:1}
+.yes{font:700 15px system-ui,sans-serif;min-width:64px;border-radius:12px;border:2px solid var(--accent);background:var(--card);color:var(--accent);cursor:pointer}
+.yes.on{background:var(--gold);border-color:var(--gold-ink);color:var(--gold-ink)}
+.co{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.co h2{font:400 26px Georgia,serif;margin:0}
+.co label{display:flex;gap:10px;align-items:center;padding:10px;border:2px solid var(--line);border-radius:12px;font-weight:600;font-size:19px}
+.co input[type=radio],.co input[type=checkbox]{width:24px;height:24px;accent-color:var(--accent);flex:none}
+.co .it{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-weight:600}
+.btn{font:700 19px system-ui,sans-serif;padding:14px;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-align:center;text-decoration:none;display:block}
+.btn.alt{background:var(--card);color:var(--accent)}
+.btn[disabled]{opacity:.4}
+.small{font-size:14px;padding:6px 10px;border-radius:8px;border:2px solid var(--line);background:var(--card);cursor:pointer}
+.note{margin:0;color:var(--muted);font-size:16px}
+.float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;background:var(--gold);color:var(--gold-ink);border:2px solid var(--gold-ink);border-radius:99px;padding:14px 22px;font:700 20px system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer}.float[hidden]{display:none}body{padding-bottom:100px}
+.float.free{bottom:calc(84px + env(safe-area-inset-bottom,0px));background:#BFE3F5;color:#0B3A57;border-color:#0B3A57}
+</style></head><body>
+<div class="wrap">
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><span class="ver">Version 18</span></header>
+<ol id="songs"></ol>
+<p class="msg" id="msg" hidden></p>
+<button class="float free" id="fr" type="button">☆Free song☆</button>
+<button class="float" id="go" type="button">&gt; Check-Out</button>
+<div class="co" id="co" hidden></div>
+<footer>Living Pages Ministry</footer>
+</div>
+<audio id="audio" preload="none"></audio>
+<script>
+var $=function(i){return document.getElementById(i)};
+var A=$("audio"),DATA=null,cur=-1,rows=[],sel={};
+
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(i);return a}
+function updGo(){}
+var st={step:1,free:-1,size:0,pick:[]};
+function openCo(step){st={step:(step===2?2:1),free:-1,size:0,pick:[]};$("songs").hidden=true;$("go").hidden=true;$("fr").hidden=true;$("co").hidden=false;renderCo();window.scrollTo(0,0)}
+function closeCo(){$("co").hidden=true;$("songs").hidden=false;$("go").hidden=false;$("fr").hidden=false}
+function formUrl(){
+  var f=DATA.songs[st.free],names=[f.title].concat(st.pick.map(function(i){return DATA.songs[i].title}));
+  var sum="FREE SONG: "+(f?f.title:"none")+" | "+st.size+"-SONG ALBUM: "+names.join("; ");
+  return DATA.feedbackForm+"?album="+encodeURIComponent(DATA.album)+"&song="+encodeURIComponent(sum)+"&free="+encodeURIComponent(f?f.title:"")+"&albumsize="+st.size}
+function renderCo(){
+  var c=$("co"),ch=chosen(),h="";
+  if(st.step===1){
+    h="<h2>Step 1: My list</h2>";
+    if(!ch.length){h+='<p class="note">You have not picked any songs yet. Go back and tap Yes next to the songs you like.</p><button class="btn" id="b">Back to songs</button><a class="btn alt" target="_blank" rel="noopener" href="'+esc(DATA.feedbackForm)+'">Skip to the feedback form</a>'}
+    else{ch.forEach(function(i){h+='<div class="it"><span>'+esc(DATA.songs[i].title)+'</span><button class="small" data-rm="'+i+'">Remove</button></div>'});
+      h+='<button class="btn" id="n">Next: choose my FREE song</button><button class="btn alt" id="b">Back to songs</button>'}}
+  else if(st.step===2){
+    h="<h2>Step 2: Choose your FREE song</h2>";
+    var pool=ch.length?ch:DATA.songs.map(function(s,i){return i});
+    h+='<p class="note">Tap the song you want FREE.</p>';
+    pool.forEach(function(i){h+='<label><input type="radio" name="fr" value="'+i+'"'+(st.free===i?" checked":"")+'>'+esc(DATA.songs[i].title)+'</label>'});
+    h+='<button class="btn alt" id="b">Back</button>'}
+  else if(st.step===3){
+    h="<h2>Step 3: Choose your album</h2>";
+    h+='<label><input type="radio" name="sz" value="3"'+(st.size===3?" checked":"")+'>Three Song Album</label><label><input type="radio" name="sz" value="5"'+(st.size===5?" checked":"")+'>Five Song Album</label>';
+    if(st.size){var yy=ch.filter(function(i){return i!==st.free}),rest=DATA.songs.map(function(s,i){return i}).filter(function(i){return i!==st.free&&!sel[i]}),av=yy.concat(rest);
+      var need=st.size-1;
+      h+='<div class="it"><span>'+esc(DATA.songs[st.free].title)+'</span><span class="note">Your free song is in your album</span></div>';
+      h+='<p class="note">Pick '+need+' more songs ('+st.pick.length+' of '+need+' picked).</p>';
+      if(av.length<need)h+='<p class="note">You only have '+av.length+' other songs in your list. Go back and tap Yes on more songs.</p>';
+      av.forEach(function(i){h+='<label><input type="checkbox" data-pk="'+i+'"'+(st.pick.indexOf(i)>-1?" checked":"")+'>'+esc(DATA.songs[i].title)+'</label>'})}
+    h+='<button class="btn alt" id="b">Back</button>'}
+  else{
+    h="<h2>Step 4: Your information</h2><p class=\"note\">Your "+(st.size===3?"Three":"Five")+" Song Album:</p><div class=\"it\"><span>"+esc(DATA.songs[st.free].title)+"</span><span class=\"note\">FREE</span></div>";
+    st.pick.forEach(function(i){h+='<div class="it">'+esc(DATA.songs[i].title)+'</div>'});
+    h+='<p class="note">Your form should open by itself. If it did not, tap the button below.</p><a class="btn" target="_blank" rel="noopener" href="'+esc(formUrl())+'">Continue: Name and Email</a><button class="btn alt" id="b">Back</button>'}
+  c.innerHTML=h;
+  var n=$("n"),b=$("b");
+  if(n)n.onclick=function(){st.step++;renderCo();window.scrollTo(0,0)};
+  if(b)b.onclick=function(){if(st.step===1)closeCo();else{st.step--;renderCo();window.scrollTo(0,0)}};
+  Array.prototype.forEach.call(c.querySelectorAll("[data-rm]"),function(e){e.onclick=function(){var i=+e.getAttribute("data-rm");delete sel[i];var y=rows[i].yes;y.className="yes";y.textContent="Yes";updGo();renderCo()}});
+  Array.prototype.forEach.call(c.querySelectorAll("input[name=fr]"),function(e){e.onchange=function(){st.free=+e.value;st.pick=st.pick.filter(function(i){return i!==st.free});st.step=3;renderCo();window.scrollTo(0,0)}});
+  Array.prototype.forEach.call(c.querySelectorAll("input[name=sz]"),function(e){e.onchange=function(){st.size=+e.value;st.pick=st.pick.slice(0,st.size-1);renderCo()}});
+  Array.prototype.forEach.call(c.querySelectorAll("[data-pk]"),function(e){e.onchange=function(){var i=+e.getAttribute("data-pk"),k=st.pick.indexOf(i);if(e.checked){if(st.pick.length>=st.size-1){e.checked=false;return}st.pick.push(i);if(st.pick.length===st.size-1){st.step=4;renderCo();window.open(formUrl(),"_blank");return}}else if(k>-1)st.pick.splice(k,1);renderCo()}});
+}
+$("go").onclick=function(){openCo(1)};$("fr").onclick=function(){openCo(2)};
+var EMBED={"album": "Sample Album", "feedbackForm": "https://form.jotform.com/262953697105062", "songs": [{"title": "God Walks Beside Us", "file": "album/01.mp3"}, {"title": "My God Is Always There", "file": "album/02.mp3"}, {"title": "Unshaken", "file": "album/03.mp3"}, {"title": "His Love, Our Salvation", "file": "album/04.mp3"}, {"title": "Teach Me Your Ways", "file": "album/05.mp3"}, {"title": "A Prodigal No More (I Am a Child of the King)", "file": "album/06.mp3"}, {"title": "Psalms 23 Blessings and More", "file": "album/07.mp3"}, {"title": "Day by Day", "file": "album/08.mp3"}, {"title": "He Is a Healer", "file": "album/09.mp3"}, {"title": "God's Works Thru Our Past", "file": "album/10.mp3"}, {"title": "God Provides", "file": "album/11.mp3"}, {"title": "Caught in the Storm", "file": "album/12.mp3"}, {"title": "Better Choices", "file": "album/13.mp3"}, {"title": "Choices", "file": "album/14.mp3"}, {"title": "Faith, Not Just Belief", "file": "album/15.mp3"}, {"title": "Hope", "file": "album/16.mp3"}, {"title": "Unshaken Grace", "file": "album/17.mp3"}, {"title": "Green Pastures", "file": "album/18.mp3"}, {"title": "You Are Always There (Remastered)", "file": "album/19.mp3"}, {"title": "Proverbs 3:4-5-6", "file": "album/20.mp3"}, {"title": "I Choose Freedom", "file": "album/21.mp3"}, {"title": "Young and Happy", "file": "album/22.mp3"}, {"title": "The Shepherd's Path", "file": "album/23.mp3"}, {"title": "Never Alone", "file": "album/24.mp3"}, {"title": "Math Party Karaoke", "file": "album/25.mp3"}, {"title": "The Gidman Biker Gang Memories", "file": "album/26.mp3"}, {"title": "I Choose To Be Free", "file": "album/27.mp3"}, {"title": "I Choose a New Day", "file": "album/28.mp3"}]};
+function fmt(s){if(!isFinite(s))return"0:00";var m=Math.floor(s/60),x=Math.floor(s%60);return m+":"+(x<10?"0":"")+x}
+function mark(){rows.forEach(function(r,i){r.li.className=(i===cur)?"on":"";if(i===cur)r.pp.textContent=A.paused?"Play":"Pause"})}
+function tryPlay(){var p=A.play();if(p&&p.catch)p.catch(function(){$("msg").hidden=false;$("msg").textContent="Tap Play to start this song.";mark()})}
+function play(i){
+  if(i===cur){if(A.paused)tryPlay();else A.pause();return}
+  cur=i;$("msg").hidden=true;A.src=DATA.songs[i].file;A.load();
+  rows.forEach(function(r){r.rg.value=0;r.tm.textContent="0:00"});
+  tryPlay();mark()}
+A.addEventListener("play",mark);A.addEventListener("pause",mark);
+A.addEventListener("ended",function(){if(cur>=0&&cur<DATA.songs.length-1)play(cur+1);else mark()});
+A.addEventListener("error",function(){$("msg").hidden=false;$("msg").textContent="This song could not load. Tap another song."});
+A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur];r.rg.max=A.duration;r.rg.value=A.currentTime;r.tm.textContent=fmt(A.currentTime)});
+function start(d){
+  DATA=d;$("album").textContent=d.album;var ol=$("songs");ol.textContent="";rows=[];
+  d.songs.forEach(function(s,i){
+    var li=document.createElement("li"),b=document.createElement("button");b.type="button";b.className="song";
+    var n=document.createElement("span");n.className="n";n.textContent=String(i+1);
+    var t=document.createElement("span");t.textContent=s.title;b.appendChild(n);b.appendChild(t);b.onclick=function(){play(i)};
+    var m=document.createElement("div");m.className="mini";
+    var pp=document.createElement("button");pp.type="button";pp.className="pp";pp.textContent="Pause";pp.onclick=function(){if(A.paused)tryPlay();else A.pause()};
+    var rg=document.createElement("input");rg.type="range";rg.min=0;rg.max=1;rg.step="any";rg.value=0;rg.oninput=function(){if(i===cur&&A.duration)A.currentTime=+rg.value};
+    var tm=document.createElement("span");tm.className="tm";tm.textContent="0:00";
+    m.appendChild(pp);m.appendChild(rg);m.appendChild(tm);
+    var row=document.createElement("div");row.className="row";row.appendChild(b);
+    var y=document.createElement("button");y.type="button";y.className="yes";y.textContent="Yes";y.setAttribute("aria-label","Add "+s.title+" to my list");
+    y.onclick=function(){if(sel[i]){delete sel[i];y.className="yes";y.textContent="Yes"}else{sel[i]=true;y.className="yes on";y.textContent="\u2713 Yes"}updGo()};
+    row.appendChild(y);li.appendChild(row);li.appendChild(m);ol.appendChild(li);
+    rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y})});
+}
+try{start(EMBED)}catch(e){$("msg").hidden=false;$("msg").textContent="Error: "+e.message}
+fetch("album.json").then(function(r){return r.json()}).then(function(d){if(d&&d.songs&&d.songs.length&&cur<0)start(d)}).catch(function(){});
+</script></body></html>
