@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v18</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v19</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -38,7 +38,7 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
 .float.free{bottom:calc(84px + env(safe-area-inset-bottom,0px));background:#BFE3F5;color:#0B3A57;border-color:#0B3A57}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><span class="ver">Version 18</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><span class="ver">Version 19</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float free" id="fr" type="button">☆Free song☆</button>
@@ -129,5 +129,14 @@ function start(d){
     rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y})});
 }
 try{start(EMBED)}catch(e){$("msg").hidden=false;$("msg").textContent="Error: "+e.message}
-fetch("album.json").then(function(r){return r.json()}).then(function(d){if(d&&d.songs&&d.songs.length&&cur<0)start(d)}).catch(function(){});
+function titleOf(n){var t=n.replace(/\.mp3$/i,"").replace(/_+/g," ").replace(/^\d+[\s.\-]+/,"").trim();return t||n.replace(/\.mp3$/i,"")}
+fetch("https://api.github.com/repos/timgidman/lpm-live-demo/contents/music/album").then(function(r){return r.json()}).then(function(list){
+  if(!Array.isArray(list)||cur>=0||Object.keys(sel).length)return;
+  var present={};list.forEach(function(f){if(/\.mp3$/i.test(f.name))present["album/"+f.name]=f.name});
+  var known={};EMBED.songs.forEach(function(x){known[x.file]=1});
+  var base=EMBED.songs.filter(function(x){return present[x.file]});
+  var extra=Object.keys(present).filter(function(k){return !known[k]}).sort().map(function(k){return{title:titleOf(present[k]),file:encodeURI(k)}});
+  if(!extra.length&&base.length===EMBED.songs.length)return;
+  start({album:EMBED.album,feedbackForm:EMBED.feedbackForm,songs:base.concat(extra)})
+}).catch(function(){});
 </script></body></html>
