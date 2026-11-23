@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v25</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v26</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -60,9 +60,15 @@ li.on:nth-child(7n+2) .song .n{color:#2a1706}
 footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .msg{color:#ffb3a8}
 .sub{font:800 26px Georgia,serif;color:#3b1d05;letter-spacing:.04em;margin-top:2px;text-shadow:0 1px 0 #fff3c4}
+.sub{display:inline-block;background:#fff;color:#2a1706;border:3px solid #7a5a14;border-radius:12px;padding:4px 18px;margin-top:8px;box-shadow:0 2px 8px rgba(0,0,0,.35);text-shadow:none}
+.side{display:flex;flex-direction:column;gap:6px;flex:none}
+.side .yes{min-width:68px;padding:8px 6px}
+.lbtn{font:700 15px system-ui,sans-serif;min-width:68px;padding:8px 6px;border-radius:12px;border:2px solid #7a5a14;background:linear-gradient(#f9e9a8,#c9962e);color:#3b1d05;cursor:pointer}
+.lbtn.on{background:#fff;box-shadow:0 0 10px 2px rgba(255,200,70,.9)}
+.lyr{white-space:pre-wrap;background:#fff8e0;color:#2a1706;border:2px solid #8c6a22;border-radius:10px;margin-top:6px;padding:12px;font:600 19px/1.6 Georgia,serif;max-height:170px;overflow-y:auto;text-align:center}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 25</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 26</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
@@ -136,6 +142,7 @@ function play(i){
 A.addEventListener("play",mark);A.addEventListener("pause",mark);
 A.addEventListener("ended",function(){if(cur>=0&&cur<DATA.songs.length-1)play(cur+1);else mark()});
 A.addEventListener("error",function(){$("msg").hidden=false;$("msg").textContent="This song could not load. Tap another song."});
+A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var q=rows[cur].ly;if(q&&!q.hidden&&q.scrollHeight>q.clientHeight&&!q.dataset.hold)q.scrollTop=(A.currentTime/A.duration)*(q.scrollHeight-q.clientHeight)});
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur];r.rg.max=A.duration;r.rg.value=A.currentTime;r.tm.textContent=fmt(A.currentTime)});
 function start(d){
   DATA=d;$("album").textContent=d.album;var ol=$("songs");ol.textContent="";rows=[];
@@ -151,8 +158,16 @@ function start(d){
     var row=document.createElement("div");row.className="row";row.appendChild(b);
     var y=document.createElement("button");y.type="button";y.className="yes";y.textContent="Yes";y.setAttribute("aria-label","Add "+s.title+" to my list");
     y.onclick=function(){if(sel[i]){delete sel[i];y.className="yes";y.textContent="Yes"}else{sel[i]=true;y.className="yes on";y.textContent="\u2713 Yes"}updGo()};
-    row.appendChild(y);li.appendChild(row);li.appendChild(m);ol.appendChild(li);
-    rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y})});
+    var side=document.createElement("div");side.className="side";side.appendChild(y);
+    var lb=document.createElement("button");lb.type="button";lb.className="lbtn";lb.textContent="Lyrics";
+    var ly=document.createElement("div");ly.className="lyr";ly.hidden=true;var loaded=false;
+    lb.onclick=function(){if(!ly.hidden){ly.hidden=true;lb.className="lbtn";return}
+      ly.hidden=false;lb.className="lbtn on";
+      if(!loaded){loaded=true;ly.textContent="Loading lyrics\u2026";
+        var base=String(s.file||"").replace(/^.*\//,"").replace(/\.mp3$/i,"");
+        fetch("lyrics/"+encodeURIComponent(base)+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){ly.textContent=t.trim()||"Lyrics for this song are coming soon."}).catch(function(){ly.textContent="Lyrics for this song are coming soon."})}};
+    side.appendChild(lb);row.appendChild(side);li.appendChild(row);li.appendChild(ly);li.appendChild(m);ol.appendChild(li);
+    rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y,ly:ly})});
 }
 try{start(EMBED)}catch(e){$("msg").hidden=false;$("msg").textContent="Error: "+e.message}
 function titleOf(n){var t=n.replace(/\.mp3$/i,"").replace(/_+/g," ").replace(/^\d+[\s.\-]+/,"").trim();return t||n.replace(/\.mp3$/i,"")}
