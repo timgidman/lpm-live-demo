@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v26</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v27</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -66,9 +66,27 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .lbtn{font:700 15px system-ui,sans-serif;min-width:68px;padding:8px 6px;border-radius:12px;border:2px solid #7a5a14;background:linear-gradient(#f9e9a8,#c9962e);color:#3b1d05;cursor:pointer}
 .lbtn.on{background:#fff;box-shadow:0 0 10px 2px rgba(255,200,70,.9)}
 .ll{padding:3px 6px;border-radius:8px;opacity:.55}.ll.now{opacity:1;background:#ffe9a0;font-weight:800;font-size:21px}.lyr{white-space:normal;position:relative;background:#fff8e0;color:#2a1706;border:2px solid #8c6a22;border-radius:10px;margin-top:6px;padding:12px;font:600 19px/1.6 Georgia,serif;max-height:170px;overflow-y:auto;text-align:center}
+
+/* v27 bolder, darker lyrics and checkout lists */
+.ll{opacity:1;color:#3b1d05;font-weight:700}
+.ll.now{background:#ffd23f;color:#000;font-weight:900;font-size:22px;border:2px solid #3b1d05}
+.co{background:#fff3d6;border:4px solid #3b1d05;color:#000}
+.co h2{color:#000;font-weight:800}
+.co .note,.co p{color:#1a0d03;font-weight:700}
+.co label,.co .it{color:#fff;font-weight:800;font-size:20px;border:3px solid #000;background:#7a1020}
+.co label:nth-of-type(5n+2),.co .it:nth-of-type(5n+2){background:#0b3d7a}
+.co label:nth-of-type(5n+3),.co .it:nth-of-type(5n+3){background:#0d5a2a}
+.co label:nth-of-type(5n+4),.co .it:nth-of-type(5n+4){background:#5a1a7a}
+.co label:nth-of-type(5n+5),.co .it:nth-of-type(5n+5){background:#0a5a58}
+.co label:has(input:checked){background:#ffd23f!important;color:#000;border-color:#000;box-shadow:0 0 0 3px #000}
+.co input[type=radio],.co input[type=checkbox]{width:28px;height:28px;accent-color:#000}
+.co .small{background:#fff;color:#000;border:3px solid #000;font-weight:800}
+.co .btn{background:#3b1d05;border-color:#000;color:#fff;font-weight:800}
+.co .btn.alt{background:#fff;color:#000;border-width:3px}
+.co .btn[disabled]{opacity:.55}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 26</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 27</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
