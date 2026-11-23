@@ -171,8 +171,8 @@ function start(d){
       var base=String(s.file||"").replace(/^.*\//,"").replace(/\.mp3$/i,"");
       fetch("lyrics/"+encodeURIComponent(base)+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
         t=t.trim();if(!t){ly.textContent="Lyrics for this song are coming soon.";return}
-        ly.textContent="";var tl=[],ix=0;t.split("\n").forEach(function(l){var d=document.createElement("div");d.className="ll";var m=l.match(/^\[(\d+):(\d\d)\]\s*(.*)$/);
-          if(m){d.textContent=m[3];d.dataset.t=1;d.dataset.i=ix;tl.push({t:(+m[1])*60+(+m[2])});ix++}else{d.textContent=l||"\u00a0"}ly.appendChild(d)});
+        ly.textContent="";var tl=[],ix=0;t.split("\n").forEach(function(l){var d=document.createElement("div");d.className="ll";var m=l.match(/^\[(\d+):(\d\d(?:\.\d)?)\]\s*(.*)$/);
+          if(m){d.textContent=m[3];d.dataset.t=1;d.dataset.i=ix;tl.push({t:(+m[1])*60+parseFloat(m[2])});ix++}else{d.textContent=l||"\u00a0"}ly.appendChild(d)});
         if(tl.length){rows[i].tl=tl;rows[i].k=-2;lyrSync()}}).catch(function(){ly.textContent="Lyrics for this song are coming soon."})}
     lb.onclick=function(){if(!ly.hidden){ly.hidden=true;lb.className="lbtn";return}show()};
     side.appendChild(lb);row.appendChild(side);li.appendChild(row);li.appendChild(ly);li.appendChild(m);ol.appendChild(li);
