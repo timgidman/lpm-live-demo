@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v23</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v24</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -36,9 +36,32 @@ footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);paddin
 .note{margin:0;color:var(--muted);font-size:16px}
 .float{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:10;background:var(--gold);color:var(--gold-ink);border:2px solid var(--gold-ink);border-radius:99px;padding:14px 22px;font:700 20px system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer}.float[hidden]{display:none}body{padding-bottom:100px}
 .float.a{bottom:calc(152px + env(safe-area-inset-bottom,0px))}.float.b{bottom:calc(84px + env(safe-area-inset-bottom,0px))}[hidden]{display:none!important}.float.free{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#BFE3F5;color:#0B3A57;border-color:#0B3A57}
+/* v24 antique jukebox look (style only) */
+body{background:radial-gradient(ellipse at 50% 0,#4a2411 0,#1e0e06 70%);background-attachment:fixed;color:#f6e7c1}
+.wrap{background:linear-gradient(90deg,#5a2c12,#7a3f1b 12%,#5a2c12 50%,#7a3f1b 88%,#5a2c12);border:7px solid #d9b25a;outline:3px solid #8c6a22;border-radius:110px 110px 22px 22px/80px 80px 22px 22px;padding:30px 16px 22px;box-shadow:0 0 0 4px #2b1408,0 14px 40px rgba(0,0,0,.6),inset 0 0 40px rgba(0,0,0,.45);gap:14px}
+header{text-align:center;background:linear-gradient(#f9e9a8,#c9962e);border:3px solid #7a5a14;border-radius:60px 60px 10px 10px;padding:14px 10px 12px;box-shadow:inset 0 0 14px rgba(255,255,255,.5),0 0 18px rgba(255,190,60,.55)}
+.eyebrow{color:#5a3a06}
+h1{color:#3b1d05;text-shadow:0 1px 0 #fff3c4}
+.ver{color:#3b1d05;border-color:#3b1d05}
+ol{background:#190c05;border:4px solid #d9b25a;border-radius:14px;padding:12px;gap:10px;box-shadow:inset 0 0 22px #000}
+.row{gap:8px;align-items:center}
+.song{background:linear-gradient(#fff7dc,#ecd9a0);border:2px solid #8c6a22;color:#2a1706;border-radius:10px;padding:8px 10px 8px 8px;gap:12px}
+.song .n{flex:none;width:46px;height:46px;min-width:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 19px system-ui,sans-serif;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6);background:radial-gradient(circle at 35% 30%,#fff9 0,transparent 35%),var(--bc,#D7263D);border:3px solid #e8e8e8;box-shadow:0 5px 0 #222,0 7px 8px rgba(0,0,0,.6),inset 0 -4px 6px rgba(0,0,0,.3)}
+li:nth-child(7n+1){--bc:#D7263D}li:nth-child(7n+2){--bc:#E5B80B}li:nth-child(7n+3){--bc:#2FAE5B}li:nth-child(7n+4){--bc:#2D7DD2}li:nth-child(7n+5){--bc:#8E44AD}li:nth-child(7n+6){--bc:#E75A9A}li:nth-child(7n+7){--bc:#17A8A0}
+li:nth-child(7n+2) .song .n{color:#2a1706;text-shadow:none}
+.song:active .n{transform:translateY(4px);box-shadow:0 1px 0 #222,0 2px 4px rgba(0,0,0,.6),inset 0 -4px 6px rgba(0,0,0,.3)}
+li.on .song{background:linear-gradient(#fff1a8,#ffc94a);border-color:#fff3b0;color:#2a1706;box-shadow:0 0 18px 4px rgba(255,200,70,.85)}
+li.on .song .n{color:#fff;transform:translateY(4px);box-shadow:0 1px 0 #222,0 0 18px 6px var(--bc),inset 0 -4px 6px rgba(0,0,0,.3)}
+li.on:nth-child(7n+2) .song .n{color:#2a1706}
+.mini{background:#2a1608;border:2px solid #8c6a22;border-radius:10px;margin-top:6px;padding:8px}
+.tm{color:#f6e7c1}
+.pp{background:linear-gradient(#f9e9a8,#c9962e);color:#3b1d05;border-color:#7a5a14}
+.yes{background:#2a1608;color:#f6e7c1;border-color:#d9b25a}
+footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
+.msg{color:#ffb3a8}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><span class="ver">Version 23</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><span class="ver">Version 24</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
