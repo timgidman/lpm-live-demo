@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v30</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v31</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -87,9 +87,12 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .co .pl{background:#ffd23f;color:#000;border:3px solid #000;border-radius:10px;font:900 18px Arial,sans-serif;padding:10px 14px;min-width:92px;flex:none;margin-left:auto}
 .co label .tt{flex:1}
 #fr{bottom:calc(220px + env(safe-area-inset-bottom,0px))}#a3{bottom:calc(152px + env(safe-area-inset-bottom,0px))}#a5{bottom:calc(84px + env(safe-area-inset-bottom,0px))}#ap{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.co .it{flex-wrap:wrap}
+.co .it .note{flex-basis:100%}
+.co .it .note{color:#ffd23f;font-weight:900}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 30</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 31</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
@@ -109,7 +112,7 @@ function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
 function flt(h){$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
-function openCo(size){A.pause();st={step:2,free:-1,size:size,pick:[]};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
+function openCo(size){A.pause();st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
 function closeCo(){stopCa();$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
   var f=DATA.songs[st.free],names=[f.title].concat(st.pick.map(function(i){return DATA.songs[i].title}));
@@ -146,13 +149,14 @@ function renderCo(){
   else{
     h="<h2>Your information</h2><p class=\"note\">"+(st.size===1?"Your FREE song:":(st.size===99?"Your Album(+): "+(st.pick.length+1)+" songs. Total $"+st.pick.length+".":"Your "+(st.size===3?"Three":"Five")+" Song Album:"))+"</p><div class=\"it\"><span>"+esc(DATA.songs[st.free].title)+"</span>"+pb(st.free)+"<span class=\"note\">FREE</span></div>";
     st.pick.forEach(function(i){h+='<div class="it"><span>'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</div>'});
-    h+='<p class="note">Your FREE song is ready. Tap Download first, then tap Continue to enter your Name and Email.</p><a class="btn" href="'+esc(DATA.songs[st.free].file)+'" download="'+esc(DATA.songs[st.free].title)+'.mp3">&#11015; Download your FREE song</a><a class="btn alt" target="_blank" rel="noopener" href="'+esc(formUrl())+'">Continue: Name and Email</a><button class="btn alt" id="b">Back</button>'}
+    h+='<p class="note">Step 1: Tap Continue and fill in your Name and Email. Step 2: Come back here and tap Download.</p><a class="btn" id="cn" target="_blank" rel="noopener" href="'+esc(formUrl())+'">1. Continue: Name and Email</a><a class="btn alt" id="dl" '+(st.sent?'':'aria-disabled="true" ')+'href="'+esc(DATA.songs[st.free].file)+'" download="'+esc(DATA.songs[st.free].title)+'.mp3" style="'+(st.sent?'':'opacity:.45;pointer-events:none')+'">2. &#11015; Download your FREE song</a><button class="btn alt" id="b">Back</button>'}
   c.innerHTML=h;
   Array.prototype.forEach.call(c.querySelectorAll("[data-pl]"),function(e){e.onclick=function(ev){ev.preventDefault();ev.stopPropagation();var i=+e.getAttribute("data-pl");
     if(cp===i&&!CA.paused){CA.pause();e.innerHTML="&#9654; Play";return}
     if(cp!==i){CA.src=DATA.songs[i].file;cp=i}
     Array.prototype.forEach.call(c.querySelectorAll("[data-pl]"),function(x){x.innerHTML="&#9654; Play"});
     var q=CA.play();if(q&&q.catch)q.catch(function(){});e.innerHTML="&#9632; Stop"}});
+  var cn=$("cn");if(cn)cn.onclick=function(){st.sent=true;var d=$("dl");if(d){d.removeAttribute("aria-disabled");d.style.opacity="";d.style.pointerEvents=""}};
   var n=$("n"),b=$("b");
   if(n)n.onclick=function(){st.step++;renderCo();window.scrollTo(0,0)};
   if(b)b.onclick=function(){if(st.step===1)closeCo();else{st.step--;renderCo();window.scrollTo(0,0)}};
