@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v28</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v29</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -88,9 +88,10 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .co label .tt{flex:1}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 28</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 29</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
+<button class="float" id="ap" type="button" style="bottom:calc(220px + env(safe-area-inset-bottom))">&gt; Album(+) 6 or more</button>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
 <button class="float b" id="a3" type="button">&gt; 3 Song Album</button>
 <button class="float free" id="fr" type="button">&gt; My Free Song</button>
@@ -106,13 +107,13 @@ function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(i);return a}
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
-function flt(h){$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
+function flt(h){$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
 function openCo(size){A.pause();st={step:2,free:-1,size:size,pick:[]};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
 function closeCo(){stopCa();$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
   var f=DATA.songs[st.free],names=[f.title].concat(st.pick.map(function(i){return DATA.songs[i].title}));
-  var sum=st.size===1?"FREE SONG ONLY: "+f.title:"FREE SONG: "+f.title+" | "+st.size+"-SONG ALBUM: "+names.join("; ");
-  return DATA.feedbackForm+"?album="+encodeURIComponent(DATA.album)+"&song="+encodeURIComponent(sum)+"&free="+encodeURIComponent(f?f.title:"")+"&albumsize="+(st.size===1?0:st.size)+"&freefile="+encodeURIComponent("https://timgidman.github.io/lpm-live-demo/music/"+f.file)}
+  var PL=st.size===99,sum=PL?"FREE SONG: "+f.title+" | ALBUM(+) "+(st.pick.length+1)+" SONGS ($"+st.pick.length+"): "+names.join("; "):st.size===1?"FREE SONG ONLY: "+f.title:"FREE SONG: "+f.title+" | "+st.size+"-SONG ALBUM: "+names.join("; ");
+  return DATA.feedbackForm+"?album="+encodeURIComponent(DATA.album)+"&song="+encodeURIComponent(sum)+"&free="+encodeURIComponent(f?f.title:"")+"&albumsize="+(st.size===1?0:PL?st.pick.length+1:st.size)+(PL?"&price="+st.pick.length:"")+"&freefile="+encodeURIComponent("https://timgidman.github.io/lpm-live-demo/music/"+f.file)}
 var CA=$("ca"),cp=-1;
 function pb(i){return '<button type="button" class="pl" data-pl="'+i+'">'+(cp===i&&!CA.paused?'&#9632; Stop':'&#9654; Play')+'</button>'}
 function stopCa(){CA.pause();cp=-1}
@@ -131,17 +132,18 @@ function renderCo(){
     pool.forEach(function(i){h+='<label><input type="radio" name="fr" value="'+i+'"'+(st.free===i?" checked":"")+'><span class="tt">'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</label>'});
     h+='<button class="btn alt" id="b">Back</button>'}
   else if(st.step===3){
-    h="<h2>Step 2: Choose "+(st.size-1)+" more songs</h2>";
+    var PL=st.size===99;h=PL?"<h2>Step 2: Choose 5 or more songs</h2>":"<h2>Step 2: Choose "+(st.size-1)+" more songs</h2>";
     
     if(st.size){var yy=ch.filter(function(i){return i!==st.free}),rest=DATA.songs.map(function(s,i){return i}).filter(function(i){return i!==st.free&&!sel[i]}),av=yy.concat(rest);
-      var need=st.size-1;
+      var need=PL?5:st.size-1;
       h+='<div class="it"><span>'+esc(DATA.songs[st.free].title)+'</span>'+pb(st.free)+'<span class="note">Your free song is in your album</span></div>';
-      h+='<p class="note">Pick '+need+' more songs ('+st.pick.length+' of '+need+' picked).</p>';
+      h+=PL?'<p class="note">Picked '+st.pick.length+' (need 5 or more). $1 per song = $'+st.pick.length+' total. Your free song costs nothing.</p>':'<p class="note">Pick '+need+' more songs ('+st.pick.length+' of '+need+' picked).</p>';
       if(av.length<need)h+='<p class="note">You only have '+av.length+' other songs in your list. Go back and tap Yes on more songs.</p>';
-      av.forEach(function(i){h+='<label><input type="checkbox" data-pk="'+i+'"'+(st.pick.indexOf(i)>-1?" checked":"")+'><span class="tt">'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</label>'})}
+      av.forEach(function(i){h+='<label><input type="checkbox" data-pk="'+i+'"'+(st.pick.indexOf(i)>-1?" checked":"")+'><span class="tt">'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</label>'});
+      if(PL)h+='<button class="btn" id="n"'+(st.pick.length<5?' disabled':'')+'>Next: $'+st.pick.length+' total</button>'}
     h+='<button class="btn alt" id="b">Back</button>'}
   else{
-    h="<h2>Your information</h2><p class=\"note\">"+(st.size===1?"Your FREE song:":"Your "+(st.size===3?"Three":"Five")+" Song Album:")+"</p><div class=\"it\"><span>"+esc(DATA.songs[st.free].title)+"</span>"+pb(st.free)+"<span class=\"note\">FREE</span></div>";
+    h="<h2>Your information</h2><p class=\"note\">"+(st.size===1?"Your FREE song:":(st.size===99?"Your Album(+): "+(st.pick.length+1)+" songs. Total $"+st.pick.length+".":"Your "+(st.size===3?"Three":"Five")+" Song Album:"))+"</p><div class=\"it\"><span>"+esc(DATA.songs[st.free].title)+"</span>"+pb(st.free)+"<span class=\"note\">FREE</span></div>";
     st.pick.forEach(function(i){h+='<div class="it"><span>'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</div>'});
     h+='<p class="note">Your FREE song is ready. Tap Download first, then tap Continue to enter your Name and Email.</p><a class="btn" href="'+esc(DATA.songs[st.free].file)+'" download="'+esc(DATA.songs[st.free].title)+'.mp3">&#11015; Download your FREE song</a><a class="btn alt" target="_blank" rel="noopener" href="'+esc(formUrl())+'">Continue: Name and Email</a><button class="btn alt" id="b">Back</button>'}
   c.innerHTML=h;
@@ -156,9 +158,9 @@ function renderCo(){
   Array.prototype.forEach.call(c.querySelectorAll("[data-rm]"),function(e){e.onclick=function(){var i=+e.getAttribute("data-rm");delete sel[i];var y=rows[i].yes;y.className="yes";y.textContent="Yes";updGo();renderCo()}});
   Array.prototype.forEach.call(c.querySelectorAll("input[name=fr]"),function(e){e.onchange=function(){st.free=+e.value;st.pick=st.pick.filter(function(i){return i!==st.free});if(st.size===1){st.step=4;renderCo();window.scrollTo(0,0);return}st.step=3;renderCo();window.scrollTo(0,0)}});
   Array.prototype.forEach.call(c.querySelectorAll("input[name=sz]"),function(e){e.onchange=function(){st.size=+e.value;st.pick=st.pick.slice(0,st.size-1);renderCo()}});
-  Array.prototype.forEach.call(c.querySelectorAll("[data-pk]"),function(e){e.onchange=function(){var i=+e.getAttribute("data-pk"),k=st.pick.indexOf(i);if(e.checked){if(st.pick.length>=st.size-1){e.checked=false;return}st.pick.push(i);if(st.pick.length===st.size-1){st.step=4;renderCo();window.scrollTo(0,0);return}}else if(k>-1)st.pick.splice(k,1);renderCo()}});
+  Array.prototype.forEach.call(c.querySelectorAll("[data-pk]"),function(e){e.onchange=function(){var i=+e.getAttribute("data-pk"),k=st.pick.indexOf(i);if(e.checked){if(st.size!==99&&st.pick.length>=st.size-1){e.checked=false;return}st.pick.push(i);if(st.size===99){renderCo();return}if(st.pick.length===st.size-1){st.step=4;renderCo();window.scrollTo(0,0);return}}else if(k>-1)st.pick.splice(k,1);renderCo()}});
 }
-$("fr").onclick=function(){openCo(1)};$("a3").onclick=function(){openCo(3)};$("a5").onclick=function(){openCo(5)};
+$("fr").onclick=function(){openCo(1)};$("a3").onclick=function(){openCo(3)};$("a5").onclick=function(){openCo(5)};$("ap").onclick=function(){openCo(99)};
 var EMBED={"album": "H M H", "feedbackForm": "https://form.jotform.com/263194064157055", "songs": [{"title": "God Walks Beside Us", "file": "album/01.mp3"}, {"title": "My God Is Always There", "file": "album/02.mp3"}, {"title": "Unshaken", "file": "album/03.mp3"}, {"title": "His Love, Our Salvation", "file": "album/04.mp3"}, {"title": "Teach Me Your Ways", "file": "album/05.mp3"}, {"title": "A Prodigal No More (I Am a Child of the King)", "file": "album/06.mp3"}, {"title": "Psalms 23 Blessings and More", "file": "album/07.mp3"}, {"title": "Day by Day", "file": "album/08.mp3"}, {"title": "He Is a Healer", "file": "album/09.mp3"}, {"title": "God's Works Thru Our Past", "file": "album/10.mp3"}, {"title": "God Provides", "file": "album/11.mp3"}, {"title": "Caught in the Storm", "file": "album/12.mp3"}, {"title": "Better Choices", "file": "album/13.mp3"}, {"title": "Choices", "file": "album/14.mp3"}, {"title": "Faith, Not Just Belief", "file": "album/15.mp3"}, {"title": "Hope", "file": "album/16.mp3"}, {"title": "Unshaken Grace", "file": "album/17.mp3"}, {"title": "Green Pastures", "file": "album/18.mp3"}, {"title": "You Are Always There (Remastered)", "file": "album/19.mp3"}, {"title": "Proverbs 3:4-5-6", "file": "album/20.mp3"}, {"title": "I Choose Freedom", "file": "album/21.mp3"}, {"title": "Young and Happy", "file": "album/22.mp3"}, {"title": "The Shepherd's Path", "file": "album/23.mp3"}, {"title": "Never Alone", "file": "album/24.mp3"}, {"title": "Math Party Karaoke", "file": "album/25.mp3"}, {"title": "The Gidman Biker Gang Memories", "file": "album/26.mp3"}, {"title": "I Choose To Be Free", "file": "album/27.mp3"}, {"title": "I Choose a New Day", "file": "album/28.mp3"}]};
 function fmt(s){if(!isFinite(s))return"0:00";var m=Math.floor(s/60),x=Math.floor(s%60);return m+":"+(x<10?"0":"")+x}
 function mark(){rows.forEach(function(r,i){r.li.className=(i===cur)?"on":"";if(i===cur)r.pp.textContent=A.paused?"Play":"Pause"})}
