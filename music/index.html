@@ -65,7 +65,7 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .side .yes{min-width:68px;padding:8px 6px}
 .lbtn{font:700 15px system-ui,sans-serif;min-width:68px;padding:8px 6px;border-radius:12px;border:2px solid #7a5a14;background:linear-gradient(#f9e9a8,#c9962e);color:#3b1d05;cursor:pointer}
 .lbtn.on{background:#fff;box-shadow:0 0 10px 2px rgba(255,200,70,.9)}
-.lyr{white-space:pre-wrap;background:#fff8e0;color:#2a1706;border:2px solid #8c6a22;border-radius:10px;margin-top:6px;padding:12px;font:600 19px/1.6 Georgia,serif;max-height:170px;overflow-y:auto;text-align:center}
+.ll{padding:3px 6px;border-radius:8px;opacity:.55}.ll.now{opacity:1;background:#ffe9a0;font-weight:800;font-size:21px}.lyr{white-space:normal;position:relative;background:#fff8e0;color:#2a1706;border:2px solid #8c6a22;border-radius:10px;margin-top:6px;padding:12px;font:600 19px/1.6 Georgia,serif;max-height:170px;overflow-y:auto;text-align:center}
 </style></head><body>
 <div class="wrap">
 <header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 26</span></header>
@@ -137,12 +137,17 @@ function tryPlay(){var p=A.play();if(p&&p.catch)p.catch(function(){$("msg").hidd
 function play(i){
   if(i===cur){if(A.paused)tryPlay();else A.pause();return}
   cur=i;$("msg").hidden=true;A.src=DATA.songs[i].file;A.load();
-  rows.forEach(function(r){r.rg.value=0;r.tm.textContent="0:00"});
+  rows.forEach(function(r,j){r.rg.value=0;r.tm.textContent="0:00";if(j!==i&&r.ly&&!r.ly.hidden){r.ly.hidden=true;r.lb.className="lbtn"}});
+  if(rows[i].show)rows[i].show();rows[i].k=-2;
   tryPlay();mark()}
 A.addEventListener("play",mark);A.addEventListener("pause",mark);
 A.addEventListener("ended",function(){if(cur>=0&&cur<DATA.songs.length-1)play(cur+1);else mark()});
 A.addEventListener("error",function(){$("msg").hidden=false;$("msg").textContent="This song could not load. Tap another song."});
-A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var q=rows[cur].ly;if(q&&!q.hidden&&q.scrollHeight>q.clientHeight&&!q.dataset.hold)q.scrollTop=(A.currentTime/A.duration)*(q.scrollHeight-q.clientHeight)});
+function lyrSync(){if(cur<0)return;var r=rows[cur],q=r.ly;if(!q||q.hidden||!r.tl)return;var t=A.currentTime,k=-1;for(var j=0;j<r.tl.length;j++){if(r.tl[j].t<=t+0.3)k=j;else break}
+  if(k===r.k)return;r.k=k;var els=q.querySelectorAll(".ll[data-t]");for(var e=0;e<els.length;e++)els[e].className=(+els[e].dataset.i===k)?"ll now":"ll";
+  var el=k>=0?q.querySelector('.ll[data-i="'+k+'"]'):null;if(el)q.scrollTop=el.offsetTop-q.clientHeight/2+el.clientHeight/2-q.offsetTop}
+A.addEventListener("timeupdate",lyrSync);
+A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur],q=r.ly;if(q&&!q.hidden&&!r.tl&&q.scrollHeight>q.clientHeight)q.scrollTop=(A.currentTime/A.duration)*(q.scrollHeight-q.clientHeight)});
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur];r.rg.max=A.duration;r.rg.value=A.currentTime;r.tm.textContent=fmt(A.currentTime)});
 function start(d){
   DATA=d;$("album").textContent=d.album;var ol=$("songs");ol.textContent="";rows=[];
@@ -161,13 +166,17 @@ function start(d){
     var side=document.createElement("div");side.className="side";side.appendChild(y);
     var lb=document.createElement("button");lb.type="button";lb.className="lbtn";lb.textContent="Lyrics";
     var ly=document.createElement("div");ly.className="lyr";ly.hidden=true;var loaded=false;
-    lb.onclick=function(){if(!ly.hidden){ly.hidden=true;lb.className="lbtn";return}
-      ly.hidden=false;lb.className="lbtn on";
-      if(!loaded){loaded=true;ly.textContent="Loading lyrics\u2026";
-        var base=String(s.file||"").replace(/^.*\//,"").replace(/\.mp3$/i,"");
-        fetch("lyrics/"+encodeURIComponent(base)+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){ly.textContent=t.trim()||"Lyrics for this song are coming soon."}).catch(function(){ly.textContent="Lyrics for this song are coming soon."})}};
+    var R={};
+    function show(){ly.hidden=false;lb.className="lbtn on";if(loaded)return;loaded=true;ly.textContent="Loading lyrics\u2026";
+      var base=String(s.file||"").replace(/^.*\//,"").replace(/\.mp3$/i,"");
+      fetch("lyrics/"+encodeURIComponent(base)+".txt").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+        t=t.trim();if(!t){ly.textContent="Lyrics for this song are coming soon.";return}
+        ly.textContent="";var tl=[],ix=0;t.split("\n").forEach(function(l){var d=document.createElement("div");d.className="ll";var m=l.match(/^\[(\d+):(\d\d)\]\s*(.*)$/);
+          if(m){d.textContent=m[3];d.dataset.t=1;d.dataset.i=ix;tl.push({t:(+m[1])*60+(+m[2])});ix++}else{d.textContent=l||"\u00a0"}ly.appendChild(d)});
+        if(tl.length){rows[i].tl=tl;rows[i].k=-2;lyrSync()}}).catch(function(){ly.textContent="Lyrics for this song are coming soon."})}
+    lb.onclick=function(){if(!ly.hidden){ly.hidden=true;lb.className="lbtn";return}show()};
     side.appendChild(lb);row.appendChild(side);li.appendChild(row);li.appendChild(ly);li.appendChild(m);ol.appendChild(li);
-    rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y,ly:ly})});
+    rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y,ly:ly,show:show,lb:lb})});
 }
 try{start(EMBED)}catch(e){$("msg").hidden=false;$("msg").textContent="Error: "+e.message}
 function titleOf(n){var t=n.replace(/\.mp3$/i,"").replace(/_+/g," ").replace(/^\d+[\s.\-]+/,"").trim();return t||n.replace(/\.mp3$/i,"")}
