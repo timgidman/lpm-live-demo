@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v33</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v34</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -90,12 +90,15 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .co .it{flex-wrap:wrap}
 .co .it .note{flex-basis:100%}
 .co .it .note{color:#ffd23f;font-weight:900}
+#fr{bottom:calc(288px + env(safe-area-inset-bottom,0px))}#a3{bottom:calc(220px + env(safe-area-inset-bottom,0px))}#a5{bottom:calc(152px + env(safe-area-inset-bottom,0px))}#ap{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+#mr{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#7a1020;color:#fff;border:3px solid #000;min-width:250px;text-align:center;text-decoration:none;font-weight:900;letter-spacing:2px;box-shadow:0 0 0 3px #ffd23f,0 4px 14px rgba(0,0,0,.4)}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 33</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 34</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
+<a class="float" id="mr" target="_blank" rel="noopener" href="https://form.jotform.com/263194064157055">MORE &rarr;</a>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
 <button class="float b" id="a3" type="button">&gt; 3 Song Album</button>
 <button class="float free" id="fr" type="button">&gt; My Free Song</button>
@@ -111,7 +114,7 @@ function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(i);return a}
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
-function flt(h){$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
+function flt(h){$("mr").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
 function openCo(size){A.pause();st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
 function closeCo(){stopCa();$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
