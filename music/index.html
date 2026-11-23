@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v32</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v33</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -92,7 +92,7 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .co .it .note{color:#ffd23f;font-weight:900}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 32</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 33</span></header>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
@@ -154,7 +154,7 @@ function renderCo(){
     st.pick.forEach(function(i){h+='<div class="it"><span>'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</div>'});
     var dlh='<a class="btn alt" id="dl" '+lock(st.sent)+'href="'+esc(DATA.songs[st.free].file)+'" download="'+esc(DATA.songs[st.free].title)+'.mp3">2. &#11015; Download your FREE song</a>',moh='<a class="btn" id="mo" '+lock(st.dled)+'target="_blank" rel="noopener" href="'+esc(formUrl())+'">3. More: feedback and checkout</a>';
     if(st.thanks)h+='<p class="note">Thank you! Tap Download to get your FREE song.</p>'+dlh.replace("2. ","1. ")+moh.replace("3. ","2. ")+'<button class="btn alt" id="b">Back</button>';
-    else h+='<p class="note">Step 1: Tap Continue and type your Name and Email. Step 2: Tap Download.</p><a class="btn" id="cn" target="_blank" rel="noopener" href="'+esc(shortUrl())+'">1. Continue: Name and Email</a>'+dlh+moh+'<button class="btn alt" id="b">Back</button>'}
+    else h+='<p class="note">Tap the button below, type your Name and Email, and we will email you the link to your FREE song. Then you will see our feedback form.</p><a class="btn" id="cn" target="_blank" rel="noopener" href="'+esc(shortUrl())+'">Get my FREE song: Name and Email</a>'+'<button class="btn alt" id="b">Back</button>'}
   c.innerHTML=h;
   Array.prototype.forEach.call(c.querySelectorAll("[data-pl]"),function(e){e.onclick=function(ev){ev.preventDefault();ev.stopPropagation();var i=+e.getAttribute("data-pl");
     if(cp===i&&!CA.paused){CA.pause();e.innerHTML="&#9654; Play";return}
