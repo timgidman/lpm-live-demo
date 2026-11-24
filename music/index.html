@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v36</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v37</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -94,7 +94,6 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 #mr{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#7a1020;color:#fff;border:3px solid #000;min-width:250px;text-align:center;text-decoration:none;font-weight:900;letter-spacing:2px;box-shadow:0 0 0 3px #ffd23f,0 4px 14px rgba(0,0,0,.4)}
 
 /* v35 topics drop-down */
-#album{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 #hb{display:block;width:100%;margin-top:8px;font:900 22px Georgia,serif;padding:14px;border-radius:12px;border:3px solid #000;background:#7a1020;color:#fff;cursor:pointer;box-shadow:0 0 0 3px #ffd23f}
 #tp{background:#fff3d6;border:4px solid #3b1d05;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
 #tp h3{margin:8px 0 0;font:900 22px Georgia,serif;color:#000}
@@ -103,13 +102,20 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 #tp button.z{opacity:.6}
 #tbar{background:#ffd23f;color:#000;border:3px solid #000;border-radius:12px;padding:10px;font-weight:900;display:flex;gap:8px;align-items:center;justify-content:space-between}
 #tbar button{font:800 16px system-ui,sans-serif;padding:8px 12px;border-radius:10px;border:3px solid #000;background:#fff;color:#000;cursor:pointer}
+
+/* v37 stack: HHH small at bottom, MORE above it same size as Album(+) */
+#hh{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#BFE3F5;color:#0B3A57;border:3px solid #0B3A57;font:800 16px system-ui,sans-serif;padding:8px 16px}
+#mr{bottom:calc(84px + env(safe-area-inset-bottom,0px));min-width:0;width:230px;letter-spacing:0;font:700 20px system-ui,sans-serif;padding:14px 22px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#ap{bottom:calc(152px + env(safe-area-inset-bottom,0px));width:230px;text-align:center}
+#a5{bottom:calc(220px + env(safe-area-inset-bottom,0px))}#a3{bottom:calc(288px + env(safe-area-inset-bottom,0px))}#fr{bottom:calc(356px + env(safe-area-inset-bottom,0px))}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><button type="button" id="hb">&#9660; Tap here: choose a Hurt, Habit or Hang-Up</button><div class="sub">Hear My Heart</div><span class="ver">Version 36</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 37</span></header>
 <div id="tw"><div id="tp" hidden></div><div id="tbar" hidden></div></div>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
+<button class="float" id="hh" type="button">H,H,H (?)</button>
 <a class="float" id="mr" target="_blank" rel="noopener" href="https://form.jotform.com/263194064157055">MORE &rarr;</a>
 <button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
 <button class="float b" id="a3" type="button">&gt; 3 Song Album</button>
@@ -126,7 +132,7 @@ function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(i);return a}
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
-function flt(h){$("mr").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
+function flt(h){$("mr").hidden=h;$("hh").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
 function openCo(size){A.pause();$("tw").hidden=true;st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
 function closeCo(){stopCa();$("tw").hidden=false;$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
@@ -221,8 +227,8 @@ function buildTp(){var p=$("tp"),cls={"Hurts":"h","Habits":"k","Hang-Ups":"g"};p
       b.innerHTML="<span>"+esc(t[0])+"</span><span>"+(t[1].length?t[1].length+" &#9835;":"soon")+"</span>";
       b.onclick=function(){TF={name:t[0],files:t[1]};p.hidden=true;applyF();window.scrollTo(0,0)};p.appendChild(b)})})}
 buildTp();
-function togTp(){$("tp").hidden=!$("tp").hidden;$("hb").innerHTML=$("tp").hidden?"&#9660; Tap here: choose a Hurt, Habit or Hang-Up":"&#9650; Close the topic list"}
-$("hb").onclick=togTp;$("album").onclick=togTp;
+function togTp(){$("tp").hidden=!$("tp").hidden;$("hh").textContent=$("tp").hidden?"H,H,H (?)":"H,H,H close";if(!$("tp").hidden)window.scrollTo(0,0)}
+$("hh").onclick=togTp;
 function start(d){
   d={album:d.album,feedbackForm:d.feedbackForm,songs:d.songs.filter(function(s){return !blocked(s.title)&&!blocked(s.file)})};DATA=d;$("album").textContent=d.album;var ol=$("songs");ol.textContent="";rows=[];
   d.songs.forEach(function(s,i){
