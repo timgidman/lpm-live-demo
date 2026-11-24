@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v34</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v35</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -92,9 +92,21 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 .co .it .note{color:#ffd23f;font-weight:900}
 #fr{bottom:calc(288px + env(safe-area-inset-bottom,0px))}#a3{bottom:calc(220px + env(safe-area-inset-bottom,0px))}#a5{bottom:calc(152px + env(safe-area-inset-bottom,0px))}#ap{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 #mr{bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#7a1020;color:#fff;border:3px solid #000;min-width:250px;text-align:center;text-decoration:none;font-weight:900;letter-spacing:2px;box-shadow:0 0 0 3px #ffd23f,0 4px 14px rgba(0,0,0,.4)}
+
+/* v35 topics drop-down */
+#album{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+#hb{display:block;width:100%;margin-top:8px;font:900 22px Georgia,serif;padding:14px;border-radius:12px;border:3px solid #000;background:#7a1020;color:#fff;cursor:pointer;box-shadow:0 0 0 3px #ffd23f}
+#tp{background:#fff3d6;border:4px solid #3b1d05;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+#tp h3{margin:8px 0 0;font:900 22px Georgia,serif;color:#000}
+#tp button{font:800 19px system-ui,sans-serif;text-align:left;padding:12px;border-radius:10px;border:3px solid #000;color:#fff;background:#0b3d7a;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+#tp button.h{background:#7a1020}#tp button.k{background:#0d5a2a}#tp button.g{background:#5a1a7a}
+#tp button.z{opacity:.6}
+#tbar{background:#ffd23f;color:#000;border:3px solid #000;border-radius:12px;padding:10px;font-weight:900;display:flex;gap:8px;align-items:center;justify-content:space-between}
+#tbar button{font:800 16px system-ui,sans-serif;padding:8px 12px;border-radius:10px;border:3px solid #000;background:#fff;color:#000;cursor:pointer}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 34</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><button type="button" id="hb">&#9660; Tap here: choose a Hurt, Habit or Hang-Up</button><div class="sub">Hear My Heart</div><span class="ver">Version 35</span></header>
+<div id="tw"><div id="tp" hidden></div><div id="tbar" hidden></div></div>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
 <button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
@@ -115,8 +127,8 @@ function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
 function flt(h){$("mr").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
-function openCo(size){A.pause();st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
-function closeCo(){stopCa();$("co").hidden=true;$("songs").hidden=false;flt(false)}
+function openCo(size){A.pause();$("tw").hidden=true;st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
+function closeCo(){stopCa();$("tw").hidden=false;$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
   var f=DATA.songs[st.free],names=[f.title].concat(st.pick.map(function(i){return DATA.songs[i].title}));
   var PL=st.size===99,sum=PL?"FREE SONG: "+f.title+" | ALBUM(+) "+(st.pick.length+1)+" SONGS ($"+st.pick.length+"): "+names.join("; "):st.size===1?"FREE SONG ONLY: "+f.title:"FREE SONG: "+f.title+" | "+st.size+"-SONG ALBUM: "+names.join("; ");
@@ -197,6 +209,19 @@ function lyrSync(){if(cur<0)return;var r=rows[cur],q=r.ly;if(!q||q.hidden||!r.tl
 A.addEventListener("timeupdate",lyrSync);
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur],q=r.ly;if(q&&!q.hidden&&!r.tl&&q.scrollHeight>q.clientHeight)q.scrollTop=(A.currentTime/A.duration)*(q.scrollHeight-q.clientHeight)});
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur];r.rg.max=A.duration;r.rg.value=A.currentTime;r.tm.textContent=fmt(A.currentTime)});
+var TOPICS=[["Hurts", [["Abandonment and Rejection", ["album/01.mp3", "album/02.mp3", "album/06.mp3", "album/19.mp3", "album/24.mp3"]], ["Abuse (Physical, Sexual or Emotional)", ["album/09.mp3"]], ["Adult Children of Dysfunctional Families", ["album/10.mp3"]], ["Alcohol, Drug and Chemical Dependency", ["album/08.mp3", "album/13.mp3", "album/21.mp3", "album/27.mp3"]], ["Death of a Loved One", ["album/01.mp3", "album/12.mp3", "album/16.mp3", "album/24.mp3"]], ["Divorce and Loss of Relationship", ["album/19.mp3", "album/24.mp3"]], ["Eating Disorders", ["album/21.mp3", "album/27.mp3"]], ["Gambling", ["album/11.mp3", "album/13.mp3", "album/21.mp3"]], ["Grief and Sadness", ["album/01.mp3", "album/07.mp3", "album/09.mp3", "album/16.mp3"]], ["Guilt and Shame", ["album/04.mp3", "album/06.mp3", "album/10.mp3", "album/17.mp3"]], ["Mental Health Struggles", ["album/09.mp3", "album/16.mp3"]], ["Obsessive-Compulsive Behavior", ["album/21.mp3", "album/27.mp3"]], ["Overspending and Financial Loss", ["album/11.mp3"]], ["Overworking and Workaholism", ["album/18.mp3"]], ["Sexual Addiction", ["album/13.mp3", "album/21.mp3", "album/27.mp3"]], ["Family Dysfunction", ["album/10.mp3"]]]], ["Habits", [["Habit 1: Realize I Am Not God", ["album/20.mp3"]], ["Habit 2: Earnestly Believe God Exists and Cares", ["album/01.mp3", "album/15.mp3"]], ["Habit 3: Commit My Life and Will to Christ", ["album/04.mp3", "album/08.mp3", "album/14.mp3", "album/20.mp3"]], ["Habit 4: Openly Examine and Confess My Faults", ["album/06.mp3", "album/10.mp3"]], ["Habit 5: Submit to Every Change God Wants", ["album/05.mp3", "album/13.mp3", "album/14.mp3", "album/21.mp3"]], ["Habit 6: Evaluate Relationships and Make Amends", []], ["Habit 7: Reserve Daily Time with God", ["album/05.mp3", "album/07.mp3", "album/08.mp3", "album/18.mp3", "album/23.mp3"]], ["Habit 8: Yield Myself to Be Used by God", ["album/14.mp3", "album/23.mp3", "album/28.mp3"]]]], ["Hang-Ups", [["Anger", []], ["Anxiety and Worry", ["album/02.mp3", "album/03.mp3", "album/07.mp3", "album/12.mp3", "album/18.mp3"]], ["Arrogance", ["album/05.mp3"]], ["Body Image Problems", []], ["Bullying and Bigotry", []], ["Codependency", ["album/27.mp3"]], ["Controlling Personalities", ["album/20.mp3"]], ["Depression", ["album/09.mp3", "album/12.mp3", "album/16.mp3", "album/24.mp3", "album/28.mp3"]], ["Fear", ["album/02.mp3", "album/03.mp3", "album/07.mp3", "album/12.mp3"]], ["Intimacy Issues (Walls)", ["album/19.mp3"]], ["Greed and Envy", ["album/11.mp3"]], ["False Guilt and Shame", ["album/04.mp3", "album/17.mp3"]], ["Impatience", []], ["Lack of Self-Control", ["album/08.mp3", "album/13.mp3", "album/14.mp3", "album/21.mp3"]], ["Lack of Trust in God", ["album/15.mp3", "album/20.mp3", "album/23.mp3"]], ["Laziness", ["album/28.mp3"]], ["Materialism", ["album/11.mp3"]], ["People Pleasing", ["album/27.mp3"]], ["Perfectionism", ["album/17.mp3"]], ["Pride", ["album/05.mp3"]], ["Procrastination", ["album/28.mp3"]], ["Racism", []], ["Self-Righteousness", []], ["Self-Condemnation", ["album/04.mp3", "album/06.mp3", "album/17.mp3", "album/27.mp3"]]]]];
+var TF=null;
+function idxOf(f){for(var i=0;i<DATA.songs.length;i++)if(DATA.songs[i].file===f)return i;return -1}
+function applyF(){rows.forEach(function(r,i){r.li.hidden=false});if(!TF)return;var keep={};TF.files.forEach(function(f){var i=idxOf(f);if(i>=0)keep[i]=1});rows.forEach(function(r,i){r.li.hidden=!keep[i]});
+  var b=$("tbar");b.hidden=false;var n=Object.keys(keep).length;b.innerHTML="<span>"+esc(TF.name)+": "+(n?n+" song"+(n>1?"s":""):"songs coming soon")+"</span><button type=\"button\" id=\"ts\">Show all songs</button>";$("ts").onclick=function(){TF=null;$("tbar").hidden=true;applyF()}}
+function buildTp(){var p=$("tp"),cls={"Hurts":"h","Habits":"k","Hang-Ups":"g"};p.innerHTML="";
+  TOPICS.forEach(function(g){var h=document.createElement("h3");h.textContent=g[0]+" ("+g[1].length+")";p.appendChild(h);
+    g[1].forEach(function(t){var b=document.createElement("button");b.type="button";b.className=cls[g[0]]+(t[1].length?"":" z");
+      b.innerHTML="<span>"+esc(t[0])+"</span><span>"+(t[1].length?t[1].length+" &#9835;":"soon")+"</span>";
+      b.onclick=function(){TF={name:t[0],files:t[1]};p.hidden=true;applyF();window.scrollTo(0,0)};p.appendChild(b)})})}
+buildTp();
+function togTp(){$("tp").hidden=!$("tp").hidden;$("hb").innerHTML=$("tp").hidden?"&#9660; Tap here: choose a Hurt, Habit or Hang-Up":"&#9650; Close the topic list"}
+$("hb").onclick=togTp;$("album").onclick=togTp;
 function start(d){
   DATA=d;$("album").textContent=d.album;var ol=$("songs");ol.textContent="";rows=[];
   d.songs.forEach(function(s,i){
@@ -225,7 +250,7 @@ function start(d){
     lb.onclick=function(){if(!ly.hidden){ly.hidden=true;lb.className="lbtn";return}show()};
     side.appendChild(lb);row.appendChild(side);li.appendChild(row);li.appendChild(ly);li.appendChild(m);ol.appendChild(li);
     rows.push({li:li,pp:pp,rg:rg,tm:tm,yes:y,ly:ly,show:show,lb:lb})});
-}
+  applyF()}
 function gotBack(){if(!/[?&]got=1/.test(location.search))return;try{var o=JSON.parse(localStorage.getItem("lpmco")||"null");if(!o)return;var fi=DATA.songs.map(function(x){return x.file}).indexOf(o.file);if(fi<0)return;
   st={step:4,free:fi,size:o.size,pick:(o.picks||[]).map(function(f){return DATA.songs.map(function(x){return x.file}).indexOf(f)}).filter(function(i){return i>=0}),sent:true,dled:false,thanks:true};
   $("songs").hidden=true;flt(true);$("co").hidden=false;renderCo()}catch(e){}}
