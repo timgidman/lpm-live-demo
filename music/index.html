@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v39</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v40</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -118,9 +118,13 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 #a5{bottom:calc(184px + env(safe-area-inset-bottom,0px));background:#7CD992}
 #a3{bottom:calc(240px + env(safe-area-inset-bottom,0px));background:#FFE14D}
 #fr{bottom:calc(296px + env(safe-area-inset-bottom,0px));background:#8FD3F4}
+
+/* v40 picket-fence mode: tiny vertical tabs side by side while a song plays or lyrics are open */
+body.fence .float{writing-mode:vertical-rl;width:40px!important;height:128px;padding:6px 0!important;font:900 14px system-ui,sans-serif!important;bottom:calc(6px + env(safe-area-inset-bottom,0px))!important;border-radius:14px 14px 6px 6px;box-shadow:0 2px 6px rgba(0,0,0,.5)!important}
+body.fence #hh{right:8px}body.fence #mr{right:52px}body.fence #ap{right:96px}body.fence #a5{right:140px}body.fence #a3{right:184px}body.fence #fr{right:228px}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 39</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 40</span></header>
 <div id="tw"><div id="tp" hidden></div><div id="tbar" hidden></div></div>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
@@ -227,6 +231,12 @@ A.addEventListener("timeupdate",lyrSync);
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur],q=r.ly;if(q&&!q.hidden&&!r.tl&&q.scrollHeight>q.clientHeight)q.scrollTop=(A.currentTime/A.duration)*(q.scrollHeight-q.clientHeight)});
 A.addEventListener("timeupdate",function(){if(cur<0||!A.duration)return;var r=rows[cur];r.rg.max=A.duration;r.rg.value=A.currentTime;r.tm.textContent=fmt(A.currentTime)});
 var TOPICS=[["Hurts", [["Abandonment and Rejection", ["album/01.mp3", "album/02.mp3", "album/06.mp3", "album/19.mp3", "album/24.mp3"]], ["Abuse (Physical, Sexual or Emotional)", ["album/09.mp3"]], ["Adult Children of Dysfunctional Families", ["album/10.mp3"]], ["Alcohol, Drug and Chemical Dependency", ["album/08.mp3", "album/13.mp3", "album/21.mp3", "album/27.mp3"]], ["Death of a Loved One", ["album/01.mp3", "album/12.mp3", "album/16.mp3", "album/24.mp3"]], ["Divorce and Loss of Relationship", ["album/19.mp3", "album/24.mp3"]], ["Eating Disorders", ["album/21.mp3", "album/27.mp3"]], ["Gambling", ["album/11.mp3", "album/13.mp3", "album/21.mp3"]], ["Grief and Sadness", ["album/01.mp3", "album/07.mp3", "album/09.mp3", "album/16.mp3"]], ["Guilt and Shame", ["album/04.mp3", "album/06.mp3", "album/10.mp3", "album/17.mp3"]], ["Mental Health Struggles", ["album/09.mp3", "album/16.mp3"]], ["Obsessive-Compulsive Behavior", ["album/21.mp3", "album/27.mp3"]], ["Overspending and Financial Loss", ["album/11.mp3"]], ["Overworking and Workaholism", ["album/18.mp3"]], ["Sexual Addiction", ["album/13.mp3", "album/21.mp3", "album/27.mp3"]], ["Family Dysfunction", ["album/10.mp3"]]]], ["Habits", [["Habit 1: Realize I Am Not God", ["album/20.mp3"]], ["Habit 2: Earnestly Believe God Exists and Cares", ["album/01.mp3", "album/15.mp3"]], ["Habit 3: Commit My Life and Will to Christ", ["album/04.mp3", "album/08.mp3", "album/14.mp3", "album/20.mp3"]], ["Habit 4: Openly Examine and Confess My Faults", ["album/06.mp3", "album/10.mp3"]], ["Habit 5: Submit to Every Change God Wants", ["album/05.mp3", "album/13.mp3", "album/14.mp3", "album/21.mp3"]], ["Habit 6: Evaluate Relationships and Make Amends", []], ["Habit 7: Reserve Daily Time with God", ["album/05.mp3", "album/07.mp3", "album/08.mp3", "album/18.mp3", "album/23.mp3"]], ["Habit 8: Yield Myself to Be Used by God", ["album/14.mp3", "album/23.mp3", "album/28.mp3"]]]], ["Hang-Ups", [["Anger", []], ["Anxiety and Worry", ["album/02.mp3", "album/03.mp3", "album/07.mp3", "album/12.mp3", "album/18.mp3"]], ["Arrogance", ["album/05.mp3"]], ["Body Image Problems", []], ["Bullying and Bigotry", []], ["Codependency", ["album/27.mp3"]], ["Controlling Personalities", ["album/20.mp3"]], ["Depression", ["album/09.mp3", "album/12.mp3", "album/16.mp3", "album/24.mp3", "album/28.mp3"]], ["Fear", ["album/02.mp3", "album/03.mp3", "album/07.mp3", "album/12.mp3"]], ["Intimacy Issues (Walls)", ["album/19.mp3"]], ["Greed and Envy", ["album/11.mp3"]], ["False Guilt and Shame", ["album/04.mp3", "album/17.mp3"]], ["Impatience", []], ["Lack of Self-Control", ["album/08.mp3", "album/13.mp3", "album/14.mp3", "album/21.mp3"]], ["Lack of Trust in God", ["album/15.mp3", "album/20.mp3", "album/23.mp3"]], ["Laziness", ["album/28.mp3"]], ["Materialism", ["album/11.mp3"]], ["People Pleasing", ["album/27.mp3"]], ["Perfectionism", ["album/17.mp3"]], ["Pride", ["album/05.mp3"]], ["Procrastination", ["album/28.mp3"]], ["Racism", []], ["Self-Righteousness", []], ["Self-Condemnation", ["album/04.mp3", "album/06.mp3", "album/17.mp3", "album/27.mp3"]]]]];
+
+var manual=false,lastY=0;
+function upd(){var on=!A.paused||rows.some(function(r){return r.ly&&!r.ly.hidden});document.body.classList.toggle("fence",on&&!manual)}
+["play","pause","ended"].forEach(function(e){A.addEventListener(e,upd)});
+document.addEventListener("click",function(){manual=false;setTimeout(upd,60)});
+window.addEventListener("scroll",function(){var y=window.pageYOffset;if(y<lastY-30){manual=true;upd()}lastY=y},{passive:true});
 var TF=null;
 function idxOf(f){for(var i=0;i<DATA.songs.length;i++)if(DATA.songs[i].file===f)return i;return -1}
 function applyF(){rows.forEach(function(r,i){r.li.hidden=false});if(!TF)return;var keep={};TF.files.forEach(function(f){var i=idxOf(f);if(i>=0)keep[i]=1});rows.forEach(function(r,i){r.li.hidden=!keep[i]});
