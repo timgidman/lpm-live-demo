@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v40</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Living Pages Store Music v41</title>
 <style>
 :root{--bg:#EDF1F3;--card:#fff;--ink:#14262E;--muted:#51666F;--line:#CFD9DE;--accent:#1F6F78;--accent-ink:#fff;--gold:#E3A72F;--gold-ink:#2B1D00;--hi:#D8EEF0;color-scheme:light}
 *{box-sizing:border-box}
@@ -122,18 +122,28 @@ footer{color:#f6e7c1;border-top-color:#d9b25a;text-align:center}
 /* v40 picket-fence mode: tiny vertical tabs side by side while a song plays or lyrics are open */
 body.fence .float{writing-mode:vertical-rl;width:40px!important;height:128px;padding:6px 0!important;font:900 14px system-ui,sans-serif!important;bottom:calc(6px + env(safe-area-inset-bottom,0px))!important;border-radius:14px 14px 6px 6px;box-shadow:0 2px 6px rgba(0,0,0,.5)!important}
 body.fence #hh{right:8px}body.fence #mr{right:52px}body.fence #ap{right:96px}body.fence #a5{right:140px}body.fence #a3{right:184px}body.fence #fr{right:228px}
+
+/* v41 wooden base with brick tabs */
+body{padding-bottom:200px!important}
+#base{position:fixed;left:0;right:0;bottom:0;z-index:30;background:linear-gradient(#7a3f1b,#4a2411 60%,#2b1408);border-top:5px solid #d9b25a;box-shadow:0 -4px 14px rgba(0,0,0,.6);padding:6px 6px calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:6px}
+#bt{font:900 15px Georgia,serif;letter-spacing:.14em;color:#ffe9a0;text-shadow:0 1px 2px #000;white-space:nowrap}
+body.fence #bt{display:none}
+#bricks{display:flex;gap:6px;justify-content:center;width:100%}
+#base .float{position:static!important;bottom:auto!important;right:auto!important;writing-mode:vertical-rl;flex:1 1 0;width:auto!important;max-width:60px;height:118px!important;padding:6px 0!important;font:900 14px system-ui,sans-serif!important;border:3px solid #000!important;border-radius:6px!important;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18),0 2px 4px rgba(0,0,0,.6)!important;white-space:nowrap;display:flex;align-items:center;justify-content:center;transform:none}
 </style></head><body>
 <div class="wrap">
-<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 40</span></header>
+<header><div class="eyebrow">Living Pages Ministry</div><h1 id="album">Loading…</h1><div class="sub">Hear My Heart</div><span class="ver">Version 41</span></header>
 <div id="tw"><div id="tp" hidden></div><div id="tbar" hidden></div></div>
 <ol id="songs"></ol>
 <p class="msg" id="msg" hidden></p>
-<button class="float" id="ap" type="button">&gt; 6+ Song Album</button>
-<button class="float" id="hh" type="button">H-H-H ?</button>
+<div id="base"><div id="bt">LIVING PAGES MINISTRY</div><div id="bricks">
+<button class="float free" id="fr" type="button">My Free Song</button>
+<button class="float b" id="a3" type="button">3 Song Album</button>
+<button class="float a" id="a5" type="button">5 Song Album</button>
+<button class="float" id="ap" type="button">6+ Song Album</button>
 <a class="float" id="mr" target="_blank" rel="noopener" href="https://form.jotform.com/263194064157055">MORE &rarr;</a>
-<button class="float a" id="a5" type="button">&gt; 5 Song Album</button>
-<button class="float b" id="a3" type="button">&gt; 3 Song Album</button>
-<button class="float free" id="fr" type="button">&gt; My Free Song</button>
+<button class="float" id="hh" type="button">H-H-H ?</button>
+</div></div>
 <div class="co" id="co" hidden></div>
 <footer>Living Pages Ministry</footer>
 </div>
@@ -146,7 +156,7 @@ function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;
 function chosen(){var a=[];for(var i=0;i<DATA.songs.length;i++)if(sel[i])a.push(i);return a}
 function updGo(){}
 var st={step:1,free:-1,size:0,pick:[]};
-function flt(h){$("mr").hidden=h;$("hh").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
+function flt(h){$("base").hidden=h;$("mr").hidden=h;$("hh").hidden=h;$("ap").hidden=h;$("a5").hidden=h;$("a3").hidden=h;$("fr").hidden=h}
 function openCo(size){A.pause();$("tw").hidden=true;st={step:2,free:-1,size:size,pick:[],sent:false};$("songs").hidden=true;flt(true);$("co").hidden=false;renderCo();window.scrollTo(0,0)}
 function closeCo(){stopCa();$("tw").hidden=false;$("co").hidden=true;$("songs").hidden=false;flt(false)}
 function formUrl(){
