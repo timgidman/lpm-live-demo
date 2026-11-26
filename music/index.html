@@ -163,6 +163,11 @@ function formUrl(){
   var f=DATA.songs[st.free],names=[f.title].concat(st.pick.map(function(i){return DATA.songs[i].title}));
   var PL=st.size===99,sum=PL?"FREE SONG: "+f.title+" | ALBUM(+) "+(st.pick.length+1)+" SONGS ($"+st.pick.length+"): "+names.join("; "):st.size===1?"FREE SONG ONLY: "+f.title:"FREE SONG: "+f.title+" | "+st.size+"-SONG ALBUM: "+names.join("; ");
   return DATA.feedbackForm+"?album="+encodeURIComponent(DATA.album)+"&song="+encodeURIComponent(sum)+"&free="+encodeURIComponent(f?f.title:"")+"&albumsize="+(st.size===1?0:PL?st.pick.length+1:st.size)+(PL?"&price="+st.pick.length:"")+"&freefile="+encodeURIComponent("https://timgidman.github.io/lpm-live-demo/music/"+f.file)}
+var HGM={"1":[8,"One Day at a Time"],"2":[8,"One Day at a Time"],"3":[24,"Still Here in the Dark"],"4":[14,"Paid in Full"],"5":[26,"Teach Me Draw Me Closer"],"6":[3,"Who You Are to Me"],"7":[11,"What You Need"],"8":[8,"One Day at a Time"],"9":[25,"By His Stripes"],"10":[5,"Near the Broken"],"11":[11,"What You Need"],"12":[24,"Still Here in the Dark"],"13":[17,"A Way Out"],"14":[17,"A Way Out"],"15":[12,"Fear Meets Faith"],"16":[15,"Anchor Joy and Peace"],"17":[24,"Still Here in the Dark"],"18":[11,"What You Need"],"19":[4,"A Father Who Runs"],"20":[9,"Trust and Obey"],"21":[6,"Lay It on Me"],"23":[9,"Trust and Obey"],"24":[24,"Still Here in the Dark"],"27":[6,"Lay It on Me"],"28":[15,"Anchor Joy and Peace"]};
+function hgOf(i){var m=(DATA.songs[i].file||"").match(/(\d+)\.mp3/);return m?HGM[String(+m[1])]:null}
+function hgH(){var h=hgOf(st.free);if(!h)return"";var n=("0"+h[0]).slice(-2),t=encodeURIComponent(h[1]);
+ if(!st.hg)return'<div class="it" style="display:block"><p class="note">Also FREE: the matching &quot;Hear God\'s Heart&quot; response to this song.</p><button class="btn" id="hgy">Yes, I would like it</button></div>';
+ return'<div class="it" style="display:block"><p class="note"><b>Hear God\'s Heart: '+esc(h[1])+'</b> (FREE)</p><audio controls preload="none" src="hgh/'+n+'.mp3" style="width:100%"></audio><a class="btn alt" href="hgh/'+n+'.mp3" download="Hear God\'s Heart - '+esc(h[1])+'.mp3">&#11015; Download your FREE response</a><p class="note">Optional: the matching lesson plan. Donate $5 or any amount you choose.</p><a class="btn" target="_blank" rel="noopener" href="https://form.jotform.com/263288779314067?lesson='+t+'&lessonnum='+h[0]+'">Donate for the Lesson Plan</a><a class="btn alt" href="lesson/?n=\'+h[0]+\'">Open the lesson plan</a></div>'}
 var CA=$("ca"),cp=-1;
 function pb(i){return '<button type="button" class="pl" data-pl="'+i+'">'+(cp===i&&!CA.paused?'&#9632; Stop':'&#9654; Play')+'</button>'}
 function stopCa(){CA.pause();cp=-1}
@@ -198,7 +203,7 @@ function renderCo(){
     h="<h2>Your information</h2><p class=\"note\">"+(st.size===1?"Your FREE song:":(st.size===99?"Your Album(+): "+(st.pick.length+1)+" songs. Total $"+st.pick.length+".":"Your "+(st.size===3?"Three":"Five")+" Song Album:"))+"</p><div class=\"it\"><span>"+esc(DATA.songs[st.free].title)+"</span>"+pb(st.free)+"<span class=\"note\">FREE</span></div>";
     st.pick.forEach(function(i){h+='<div class="it"><span>'+esc(DATA.songs[i].title)+'</span>'+pb(i)+'</div>'});
     var dlh='<a class="btn alt" id="dl" '+lock(st.sent)+'href="'+esc(DATA.songs[st.free].file)+'" download="'+esc(DATA.songs[st.free].title)+'.mp3">2. &#11015; Download your FREE song</a>',moh='<a class="btn" id="mo" '+lock(st.dled)+'target="_blank" rel="noopener" href="'+esc(formUrl())+'">3. More: feedback and checkout</a>';
-    if(st.thanks)h+='<p class="note">Thank you! Tap Download to get your FREE song.</p>'+dlh.replace("2. ","1. ")+moh.replace("3. ","2. ")+'<button class="btn alt" id="b">Back</button>';
+    if(st.thanks)h+='<p class="note">Thank you! Tap Download to get your FREE song.</p>'+dlh.replace("2. ","1. ")+moh.replace("3. ","2. ")+hgH()+'<button class="btn alt" id="b">Back</button>';
     else h+='<p class="note">Tap the button below, type your Name and Email, and we will email you the link to your FREE song. Then you will see our feedback form.</p><a class="btn" id="cn" target="_blank" rel="noopener" href="'+esc(shortUrl())+'">Get my FREE song: Name and Email</a>'+'<button class="btn alt" id="b">Back</button>'}
   c.innerHTML=h;
   Array.prototype.forEach.call(c.querySelectorAll("[data-pl]"),function(e){e.onclick=function(ev){ev.preventDefault();ev.stopPropagation();var i=+e.getAttribute("data-pl");
@@ -209,6 +214,7 @@ function renderCo(){
   function unl(id){var d=$(id);if(d){d.removeAttribute("aria-disabled");d.style.opacity="";d.style.pointerEvents=""}}
   if(st.thanks)st.sent=true;
   var cn=$("cn");if(cn)cn.onclick=function(){st.sent=true;unl("dl");try{localStorage.setItem("lpmco",JSON.stringify({file:DATA.songs[st.free].file,size:st.size,picks:st.pick.map(function(i){return DATA.songs[i].file})}))}catch(e){}};
+  var hgy=$("hgy");if(hgy)hgy.onclick=function(){st.hg=true;renderCo()};
   var dl=$("dl");if(dl)dl.addEventListener("click",function(){st.dled=true;unl("mo")});
   var n=$("n"),b=$("b");
   if(n)n.onclick=function(){st.step++;renderCo();window.scrollTo(0,0)};
