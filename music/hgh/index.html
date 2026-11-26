@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HMH + HGH Jukebox v8</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HMH + HGH Jukebox v9</title>
 <style>
 *{box-sizing:border-box}body{margin:0;padding:16px 10px 40px;background:radial-gradient(ellipse at 50% 0,#4a2411 0,#1e0e06 70%);background-attachment:fixed;color:#f6e7c1;font:16px/1.3 system-ui,sans-serif}
 .wrap{max-width:560px;margin:0 auto;background:linear-gradient(90deg,#5a2c12,#7a3f1b 12%,#5a2c12 50%,#7a3f1b 88%,#5a2c12);border:7px solid #d9b25a;outline:3px solid #8c6a22;border-radius:110px 110px 22px 22px/80px 80px 22px 22px;padding:30px 10px 20px;box-shadow:0 0 0 4px #2b1408,0 14px 40px #000}
@@ -28,7 +28,8 @@ body{padding-bottom:240px!important}
 #sm{display:none;background:#fff7dc;border:2px solid #d9b25a;border-radius:10px;padding:6px;max-height:40vh;overflow:auto}#sm button{display:block;width:100%;text-align:left;font:700 15px system-ui;padding:9px;border:0;border-bottom:1px solid #d9b25a;background:none;color:#3b1d05}
 .lp{position:relative}.lp .x{margin-right:84px}.lp .pdf{position:absolute;top:8px;right:8px;font:800 14px system-ui;text-decoration:none;color:#fff;background:#1f9d4a;border:2px solid #0d5a26;border-radius:8px;padding:6px 10px;box-shadow:0 2px 0 #0d5a26}.lp .pdf.on{background:#e3a72f;color:#2b1d00;border-color:#7a5a14;box-shadow:0 2px 0 #7a5a14}
 #bricks .tb{height:136px!important;font-size:13px!important}
-</style></head><body><div class="wrap"><header><h1>Hear My Heart<br>Hear God's Heart</h1><span class="ver">Jukebox v8</span></header>
+.lyr{grid-column:1/-1;max-height:150px;overflow-y:auto;background:#fff7dc;color:#2a1706;border:2px solid #8c6a22;border-radius:10px;padding:8px 10px;font:700 17px/1.5 Georgia,serif;scroll-behavior:smooth}.lyr .ll{padding:2px 4px;border-radius:6px;opacity:.65}.lyr .ll.cur{background:#4CA8C9;color:#000;opacity:1}
+</style></head><body><div class="wrap"><header><h1>Hear My Heart<br>Hear God's Heart</h1><span class="ver">Jukebox v9</span></header>
 <div class="cols"><div>HEAR MY HEART<br><small>tap a song</small></div><div></div><div>HEAR GOD'S HEART<br><small>tap His response</small></div></div>
 <ol id="L"></ol><div id="base"><div id="sm"></div><div id="pl"><input id="sk" type="range" min="0" max="1000" value="0"><span id="now">Tap any button</span></div><div id="bt">LIVING PAGES MINISTRY</div><div id="bricks"><button class="tb" id="pp" type="button" style="background:#ffe14d">Play</button><button class="tb" id="nser" type="button" style="background:#c9a7f0">Series</button><button class="tb" id="nles" type="button" style="background:#ffb36b">Lesson</button><a class="tb" id="nfree" href="../" style="background:#8ed1f6">My Free Song</a><a class="tb" id="a3" href="../" style="background:#ffe14d">3 Song Album</a><a class="tb" id="a5" href="../" style="background:#7dd98f">5 Song Album</a><a class="tb" id="ap" href="../" style="background:#ff9d3d">6+ Song Album</a><a class="tb" id="ndon" href="https://form.jotform.com/263288779314067" target="_blank" rel="noopener" style="background:#e8354a">Donate</a><a class="tb" id="mr" href="https://form.jotform.com/263194064157055" target="_blank" rel="noopener" style="background:#c8102e">MORE &rarr;</a></div></div>
 <footer>Living Pages Ministry</footer></div><audio id="A" preload="none"></audio>
@@ -50,6 +51,14 @@ A.ontimeupdate=function(){if(A.duration)document.getElementById("sk").value=A.cu
 document.getElementById("sk").oninput=function(){if(A.duration)A.currentTime=this.value/1000*A.duration};
 document.getElementById("pp").onclick=function(){if(!cur)return;if(A.paused)A.play();else A.pause()};
 A.onended=function(){if(cur)cur.classList.remove("on");cur=null;document.getElementById("pp").innerHTML="&#9654; Play"};
+var LYBASE="../lyrics/";
+var LY=null,LYT=[],LYLI=null;
+function lyOff(){if(LY){LY.remove();LY=null}LYT=[]}
+A.addEventListener("play",function(){var i=btns.indexOf(cur);if(i<0||i%2){lyOff();return}var r=R[i/2],li=cur.parentNode;if(LYLI===li&&LY)return;lyOff();LYLI=li;
+ var d=document.createElement("div");d.className="lyr";d.textContent="Loading lyrics...";li.appendChild(d);LY=d;
+ fetch(LYBASE+("0"+r.n).slice(-2)+".txt").then(function(x){if(!x.ok)throw 0;return x.text()}).then(function(t){if(LY!==d)return;d.textContent="";t.trim().split("\n").forEach(function(l){var e=document.createElement("div");e.className="ll";var m=l.match(/^\[(\d+):(\d\d(?:\.\d)?)\]\s*(.*)$/);if(m){e.textContent=m[3];LYT.push({t:(+m[1])*60+parseFloat(m[2]),e:e})}else e.textContent=l||"\u00a0";d.appendChild(e)})}).catch(function(){if(LY===d){d.remove();LY=null}})});
+A.addEventListener("timeupdate",function(){if(!LY||!LYT.length)return;var k=-1;for(var j=0;j<LYT.length;j++){if(LYT[j].t<=A.currentTime)k=j;else break}LYT.forEach(function(x,j){x.e.classList.toggle("cur",j===k)});if(k>=0){var e=LYT[k].e;LY.scrollTop=e.offsetTop-LY.clientHeight/2+e.clientHeight/2}});
+A.addEventListener("ended",function(){lyOff()});
 var sm=document.getElementById("sm"),secs=[].slice.call(document.querySelectorAll("li.sec"));
 secs.forEach(function(h){var b=document.createElement("button");b.textContent=h.textContent;b.onclick=function(){sm.style.display="none";h.scrollIntoView({behavior:"smooth",block:"start"})};sm.appendChild(b)});
 document.getElementById("nser").onclick=function(){sm.style.display=sm.style.display==="block"?"none":"block"};
